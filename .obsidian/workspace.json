@@ -52,7 +52,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#Note",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -73,7 +73,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -166,6 +167,11 @@
   "lastOpenFiles": [
     "_tabs/about.md",
     "_posts/2025-01-20-OpenXrCustomEngine.md",
+    "assets/__rar_38744.39111",
+    "assets/__rar_38744.38383",
+    "assets/__rar_4040.20744",
+    "assets/__rar_4040.18916",
+    "assets/vrmanager.rar",
     "_tabs/tags.md",
     "_tabs/categories.md",
     "_tabs/archives.md",
