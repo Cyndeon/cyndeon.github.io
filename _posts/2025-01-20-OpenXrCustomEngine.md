@@ -23,7 +23,7 @@ During the process of implementing OpenXR I have learned a lot about not only Op
 It is worth keeping in mind that I used my Rift S to test any code that I wrote. While OpenXR does support most, if not all major headsets, some things might work differently based on the headset you use.
 
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Do keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not.
-[VrManager](assets/vrmanager.rar)
+[VrManager](../assets/vrmanager.rar)
 
 #### Requirements:
 - Visual Studio (or another environment for programming)
