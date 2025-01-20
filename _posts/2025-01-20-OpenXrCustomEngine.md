@@ -14,7 +14,6 @@ description: A blog about how to implement OpenXR rendering into a custom C++ en
 toc: true
 ---
 # This blog post is unfinished and still a work in progress!
-
 ### Intro:
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
