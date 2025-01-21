@@ -14,7 +14,7 @@ description: A blog about how to implement OpenXR rendering into a custom C++ en
 toc: true
 ---
 # This blog post is unfinished and still a work in progress!
-#### Intro:
+#### Intro
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
 During the process of implementing OpenXR I have learned a lot about not only OpenXR, but also OpenGL, which is the rendering library that Bee uses. Of course, none of this hasn't been without running into many obstacles. In this blog post I will explain how I implemented OpenXR and combined it with the pre-existing Bee library. I will go over what my original plans were, how I got the required scripts to run, how I made the rendering using the OpenXR swapchains combined with OpenGL and much more!
@@ -24,12 +24,12 @@ It is worth keeping in mind that I used my Rift S to test any code that I wrote.
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Do keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not.
 [VrManager](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/vrmanager.rar)
 
-#### Requirements:
+#### Requirements
 - Visual Studio (or another environment for programming)
 - VR headset compatible with OpenXR (I used a Rift S for this)
 - An engine in C++ (At the very least, it should be able to open a window and render graphics to a framebuffer, with a rendering function that we can call manually in our script. The framebuffer will also have to be accessible. It also will need to use Entt or you will have to modify the code to remove the Entt parts)
 
-#### First steps:
+#### First steps
 
 So the first step to any project, deciding on what you want to make and setting up some milestones for yourself. These don't always have to be time-bound, but in my case, since this is for school, I have 1 milestone every 2 weeks excluding the first week, so week 3, 5 and 7 all had milestones attached to them.
 For me, the end result was that I wanted to be able to render a scene to my VR headset and be able to move around some physics objects with my hands. I also wanted to add some basic movement, which at the time I hadn't exactly decided on yet, but I did know that simple walking around when moving the thumbstick would be the easiest and thus most likely to be implemented. For being able to use physics, I was going to use the Jolt library, which is a library can deal with the physics calculations.
