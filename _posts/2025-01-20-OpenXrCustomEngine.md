@@ -14,7 +14,7 @@ description: A blog about how to implement OpenXR rendering into a custom C++ en
 toc: true
 ---
 # This blog post is unfinished and still a work in progress!
-### Intro:
+#### Intro:
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
 During the process of implementing OpenXR I have learned a lot about not only OpenXR, but also OpenGL, which is the rendering library that Bee uses. Of course, none of this hasn't been without running into many obstacles. In this blog post I will explain how I implemented OpenXR and combined it with the pre-existing Bee library. I will go over what my original plans were, how I got the required scripts to run, how I made the rendering using the OpenXR swapchains combined with OpenGL and much more!
@@ -29,7 +29,7 @@ For those wishing to skip straight to the end and/or take a look at my code, I b
 - VR headset compatible with OpenXR (I used a Rift S for this)
 - An engine in C++ (At the very least, it should be able to open a window and render graphics to a framebuffer, with a rendering function that we can call manually in our script. The framebuffer will also have to be accessible. It also will need to use Entt or you will have to modify the code to remove the Entt parts)
 
-##### First steps:
+#### First steps:
 
 So the first step to any project, deciding on what you want to make and setting up some milestones for yourself. These don't always have to be time-bound, but in my case, since this is for school, I have 1 milestone every 2 weeks excluding the first week, so week 3, 5 and 7 all had milestones attached to them.
 For me, the end result was that I wanted to be able to render a scene to my VR headset and be able to move around some physics objects with my hands. I also wanted to add some basic movement, which at the time I hadn't exactly decided on yet, but I did know that simple walking around when moving the thumbstick would be the easiest and thus most likely to be implemented. For being able to use physics, I was going to use the Jolt library, which is a library can deal with the physics calculations.
@@ -58,7 +58,7 @@ Week 7 milestone: Implement controller input and then implement Jolt physics for
 As one might be able to tell, I got stuck on the rendering part for a good while before finally getting it to work properly and I will go into more detail when we get to the rendering step.
 As one can also see, the milestones had changed a lot since when I first started compared to when the project was over. Plans change, stuff like this happens, mostly when researching subjects that one does not have any knowledge of. New things will most likely take a lot of time to do properly and thus, the milestones should evolve over time to better and more accurately reflect one's progress.
 
-##### Implementing OpenXR
+#### Implementing OpenXR
 So, the goals have been set, now to implement the library and get to work!
 Personally, I downloaded the NuGet package with all the libraries. The package is called "OpenXR.Headers" by Khronos Group. I used version 1.0.10.2. Installing this package should also download OpenXR.Loader automatically.
 
@@ -132,22 +132,22 @@ struct XrMatrix4x4f
 class VrManager
 {		
 private:
-		XrInstance m_instance = XR_NULL_HANDLE;
-		XrSystemId m_systemId = 0;
-		XrSession m_session = XR_NULL_HANDLE;
+	XrInstance m_instance = XR_NULL_HANDLE;
+	XrSystemId m_systemId = 0;
+	XrSession m_session = XR_NULL_HANDLE;
 		
-		Renderer* m_renderer; // this will be a pointer to your own rendering class
+	Renderer* m_renderer; // this will be a pointer to your own rendering class
 
-		std::vector<XrSwapchain> m_swapchains;
-		std::vector<std::vector<XrSwapchainImageOpenGLKHR>> m_swapchainImages;
-		std::vector<Dimensions> m_swapchainDimensions;
-		std::vector<XrViewConfigurationView> m_viewConfigViews;
-		std::vector<XrViewConfigurationType> m_viewConfigTypes = {XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO, XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO};
-		XrViewConfigurationType m_viewConfig = XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM;
-		XrSpace m_referenceSpace;
-		XrSessionState m_sessionState = XR_SESSION_STATE_UNKNOWN;
-		uint32_t m_viewCount = 0;
-		std::vector<XrView> m_views;
+	std::vector<XrSwapchain> m_swapchains;
+	std::vector<std::vector<XrSwapchainImageOpenGLKHR>> m_swapchainImages;
+	std::vector<Dimensions> m_swapchainDimensions;
+	std::vector<XrViewConfigurationView> m_viewConfigViews;
+	std::vector<XrViewConfigurationType> m_viewConfigTypes = {XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO, XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO};
+	XrViewConfigurationType m_viewConfig = XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM;
+	XrSpace m_referenceSpace;
+	XrSessionState m_sessionState = XR_SESSION_STATE_UNKNOWN;
+	uint32_t m_viewCount = 0;
+	std::vector<XrView> m_views;
 }
 ```
 This might look a bit intimidating at first, but when you take a closer look at it, it's not that difficult.
@@ -177,33 +177,32 @@ struct XrMatrix4x4f
 class VrManager
 {	
 public
-		VrManager();
-		~VrManager();
+	VrManager();
+	~VrManager();
 		
-		bool Initialize();
-		void Update();
+	bool Initialize();
+	void Update();
 
 private:
-		void Render();
-		bool CreateInstance();
-		void GetInstanceProperties();
-		void GetViewConfigurationViews();
-		bool GetSystem();
-		bool CreateSession();
-		bool BeginSession();
-		bool CreateSwapchains();
-		void PollEvents();
+	void Render();
+	bool CreateInstance();
+	void GetInstanceProperties();
+	void GetViewConfigurationViews();
+	bool GetSystem();
+	bool CreateSession();
+	bool BeginSession();
+	bool CreateSwapchains();
+	void PollEvents();
 
     // math / conversion functions
-    inline glm::vec3 XrVec3ToGLMVec3(XrVector3f xrVec) { return glm::vec3(xrVec.x, xrVec.y, -xrVec.z); }
+	 inline glm::vec3 XrVec3ToGLMVec3(XrVector3f xrVec) { return glm::vec3(xrVec.x, xrVec.y, -xrVec.z); }
     inline glm::vec4 XrQuatToGLMVec4(XrQuaternionf xrQuat) { return glm::vec4(xrQuat.x, xrQuat.y, xrQuat.z, xrQuat.w); }
-    inline static void XrMatrix4x4f_To_glm_mat4x4(glm::mat4& result, XrMatrix4x4f xrmatrix4x4f)
+	 inline static void XrMatrix4x4f_To_glm_mat4x4(glm::mat4& result, XrMatrix4x4f xrmatrix4x4f)
     {
         result = glm::make_mat4(xrmatrix4x4f.m);
     }
 
     void XrMatrix4x4f_CreateProjectionFov(XrMatrix4x4f* result, const XrFovf fov, const float nearZ, const float farZ);
-
     void XrMatrix4x4f_CreateProjection(XrMatrix4x4f* result,
                                        const float tanAngleLeft,
                                        const float tanAngleRight,
@@ -213,22 +212,22 @@ private:
                                        const float farZ);
 
 		// variables
-		XrInstance m_instance = XR_NULL_HANDLE;
-		XrSystemId m_systemId = 0;
-		XrSession m_session = XR_NULL_HANDLE;
+	XrInstance m_instance = XR_NULL_HANDLE;
+	XrSystemId m_systemId = 0;
+	XrSession m_session = XR_NULL_HANDLE;
 		
-		Renderer* m_renderer; // this will be a pointer to your own rendering class
+	Renderer* m_renderer; // this will be a pointer to your own rendering class
 
-		std::vector<XrSwapchain> m_swapchains;
-		std::vector<std::vector<XrSwapchainImageOpenGLKHR>> m_swapchainImages;
-		std::vector<Dimensions> m_swapchainDimensions;
-		std::vector<XrViewConfigurationView> m_viewConfigViews;
-		std::vector<XrViewConfigurationType> m_viewConfigTypes = {XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO, XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO};
-		XrViewConfigurationType m_viewConfig = XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM;
-		XrSpace m_referenceSpace;
-		XrSessionState m_sessionState = XR_SESSION_STATE_UNKNOWN;
-		uint32_t m_viewCount = 0;
-		std::vector<XrView> m_views;
+	std::vector<XrSwapchain> m_swapchains;
+	std::vector<std::vector<XrSwapchainImageOpenGLKHR>> m_swapchainImages;
+	std::vector<Dimensions> m_swapchainDimensions;
+	std::vector<XrViewConfigurationView> m_viewConfigViews;
+	std::vector<XrViewConfigurationType> m_viewConfigTypes = {XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO, XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO};
+	XrViewConfigurationType m_viewConfig = XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM;
+	XrSpace m_referenceSpace;
+	XrSessionState m_sessionState = XR_SESSION_STATE_UNKNOWN;
+	uint32_t m_viewCount = 0;
+	std::vector<XrView> m_views;
 }
 ```
 Now we've got some functions to properly set up and use the variables we just created. What these functions do is relatively self-explanatory based on the names of the variables, but we'll get to that soon enough.
