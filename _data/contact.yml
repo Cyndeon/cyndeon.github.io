@@ -8,7 +8,7 @@
 
 - type: email
   icon: "fas fa-envelope"
-  noblank: true # open link in current tab
+  noblank: false # open link in current tab
 
 #- type: rss
 #  icon: "fas fa-rss"
@@ -22,6 +22,22 @@
 - type: linkedin
   icon: 'fab fa-linkedin'   # icons powered by <https://fontawesome.com/>
   url:  'https://www.linkedin.com/in/justin-comans-8494971b8'                  # Fill with your Linkedin homepage
+  
+- type: itch
+  icon: 'fab fa-itch-io'   # icons powered by <https://fontawesome.com/>
+  url:  'https://cyndeon.itch.io/' # Fill with your Itch homepage
+
+- type: gamejolt
+  icon: 'fa-solid fa-bolt'   # icons powered by <https://fontawesome.com/>
+  url:  'https://gamejolt.com/@SuperJustin' # Fill with your Gamejolt homepage
+
+- type: notion
+  icon: 'fa-solid fa-n'   # icons powered by <https://fontawesome.com/>
+  url:  'https://www.notion.so/Justin-C-cbe31a1b387d451fb2407c32e0a377e8' # Fill with your Notion homepage
+
+- type: linktree
+  icon: 'fa-solid fa-tree'   # icons powered by <https://fontawesome.com/>
+  url:  'https://linktr.ee/JustinGameDev' # Fill with your Linktree homepage
 #
 # - type: stack-overflow
 #   icon: 'fab fa-stack-overflow'

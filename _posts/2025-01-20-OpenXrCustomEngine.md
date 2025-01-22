@@ -2,19 +2,18 @@
 title: How I implemented OpenXR rendering into a custom engine in C++
 date: 2025-01-20 18:33:00 +/-0100
 categories:
-  - Vr
-  - Gamedev
+  - Programming
+  - Virtual-Reality
 tags:
   - cpp
   - openxr
   - opengl
-  - programming
   - entt
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 ---
 # This blog post is unfinished and still a work in progress!
-#### Intro
+## Intro
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
 During the process of implementing OpenXR I have learned a lot about not only OpenXR, but also OpenGL, which is the rendering library that Bee uses. Of course, none of this hasn't been without running into many obstacles. In this blog post I will explain how I implemented OpenXR and combined it with the pre-existing Bee library. I will go over what my original plans were, how I got the required scripts to run, how I made the rendering using the OpenXR swapchains combined with OpenGL and much more!
@@ -24,12 +23,12 @@ It is worth keeping in mind that I used my Rift S to test any code that I wrote.
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Do keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not.
 [VrManager](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/vrmanager.rar)
 
-#### Requirements
+## Requirements
 - Visual Studio (or another environment for programming)
-- VR headset compatible with OpenXR (I used a Rift S for this)
-- An engine in C++ (At the very least, it should be able to open a window and render graphics to a framebuffer, with a rendering function that we can call manually in our script. The framebuffer will also have to be accessible. It also will need to use Entt or you will have to modify the code to remove the Entt parts)
+- VR headset compatible with OpenXR
+- An engine in C++ (At the very least, it should be able to open a window and render graphics to a framebuffer, with a rendering function that we can call manually in our script. The framebuffer will also have to be accessible and the size needs to be able to be set before creation)
 
-#### First steps
+## First steps
 
 So the first step to any project, deciding on what you want to make and setting up some milestones for yourself. These don't always have to be time-bound, but in my case, since this is for school, I have 1 milestone every 2 weeks excluding the first week, so week 3, 5 and 7 all had milestones attached to them.
 For me, the end result was that I wanted to be able to render a scene to my VR headset and be able to move around some physics objects with my hands. I also wanted to add some basic movement, which at the time I hadn't exactly decided on yet, but I did know that simple walking around when moving the thumbstick would be the easiest and thus most likely to be implemented. For being able to use physics, I was going to use the Jolt library, which is a library can deal with the physics calculations.
@@ -58,7 +57,7 @@ Week 7 milestone: Implement controller input and then implement Jolt physics for
 As one might be able to tell, I got stuck on the rendering part for a good while before finally getting it to work properly and I will go into more detail when we get to the rendering step.
 As one can also see, the milestones had changed a lot since when I first started compared to when the project was over. Plans change, stuff like this happens, mostly when researching subjects that one does not have any knowledge of. New things will most likely take a lot of time to do properly and thus, the milestones should evolve over time to better and more accurately reflect one's progress.
 
-#### Implementing OpenXR
+## Implementing OpenXR
 So, the goals have been set, now to implement the library and get to work!
 Personally, I downloaded the NuGet package with all the libraries. The package is called "OpenXR.Headers" by Khronos Group. I used version 1.0.10.2. Installing this package should also download OpenXR.Loader automatically.
 
@@ -93,6 +92,8 @@ Now onto the actual interesting subjects.
 
 The header will be explained first.
 
+### Includes
+
 First the includes. In my header I include the following:
 ```cpp
 #pragma once
@@ -117,6 +118,8 @@ First the includes. In my header I include the following:
 ```
 
 As shown here, I include some basic C++ things like strings and vectors, but also OpenXR and some Glad for math, you are free to use whatever math library you'd like, though you might have to create your own conversion functions to accommodate for this. 
+
+### Variables
 
 After that, we will need a couple of variables, so it should look something like this:
 ```cpp
@@ -231,3 +234,67 @@ private:
 }
 ```
 Now we've got some functions to properly set up and use the variables we just created. What these functions do is relatively self-explanatory based on the names of the variables, but we'll get to that soon enough.
+
+### Creating the functions
+I will start from the top and work my way through each function, one at a time.
+First, the constructor, it's very short and simple. I call the Initialize() function that will set up everything for OpenXR, after that I create the pointer to my renderer but I also give the renderer the dimensions of my swapchain, this is because the framebuffer that the renderer creates should have the same size as the swapchainImages, since those are the ones that will be displayed to the user. I also use the first element in the array which is the left eye, it does not matter whether element 0 or 1 is used since both will have the same dimensions.
+```cpp
+VrManager::VrManager()
+{
+    Initialize();
+    m_renderer = &Engine.CreateRenderer(m_swapchainDimensions[0].width, m_swapchainDimensions[0].height);
+}
+```
+
+Since the Initialize() function is rather big, I will go through it step by step to make it more digestible.
+
+```cpp
+bool result = CreateInstance();
+if (!result)
+{
+    std::cerr << "Instance creation failed" << std::endl;
+    return false;
+}
+
+result = GetSystem();
+if (!result)
+{
+    std::cerr << "System detection failed" << std::endl;
+    return false;
+}
+```
+First, the essentials. We create the instance and get the system details, as you can see here, I also have a boolean for result, if at any point, result returns false, something went wrong, we log it, and quit the setup. If your program would require some specific actions to happen if this setup fails, you can modify the constructor to do something if Initialize() returns false.
+
+```cpp
+GetViewConfigurationViews();
+
+XrSystemProperties systemProperties = {XR_TYPE_SYSTEM_PROPERTIES};
+result = xrGetSystemProperties(m_instance, m_systemId, &systemProperties);
+if (result != XR_SUCCESS)
+{
+    std::cerr << "System Properties Not Found" << std::endl;
+}
+else
+{
+    XrSystemGraphicsProperties graphicsProperties = systemProperties.graphicsProperties;
+        std::cout << "Max swapchain width: " << graphicsProperties.maxSwapchainImageWidth << '\n';
+        std::cout << "Max swapchain height: " << graphicsProperties.maxSwapchainImageHeight << '\n';
+}
+
+XrGraphicsRequirementsOpenGLKHR graphicsRequirements = {XR_TYPE_GRAPHICS_REQUIREMENTS_OPENGL_KHR};
+PFN_xrGetOpenGLGraphicsRequirementsKHR pfnGetOpenGLGraphicsRequirementsKHR = NULL;
+result = xrGetInstanceProcAddr(m_instance,
+                               "xrGetOpenGLGraphicsRequirementsKHR",
+                               (PFN_xrVoidFunction*)&pfnGetOpenGLGraphicsRequirementsKHR);
+
+if (result == XR_SUCCESS && pfnGetOpenGLGraphicsRequirementsKHR)
+{
+    result = pfnGetOpenGLGraphicsRequirementsKHR(m_instance, m_systemId, &graphicsRequirements);
+
+    if (result != XR_SUCCESS)
+    {
+        std::cerr << "Failed to get OpenGL graphics requirements" << '\n';
+    }
+}
+```
+Here we set up the configuration views and we also make sure 
