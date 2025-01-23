@@ -11,6 +11,7 @@ tags:
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 media_subpath: /assets/
+image: Colored.png
 ---
 ## Intro
 
