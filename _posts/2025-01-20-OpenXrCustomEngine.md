@@ -11,8 +11,6 @@ tags:
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 ---
-# This blog post is unfinished and still a work in progress!
-# Note to self: Add vid and screenshot in the intro!
 ## Intro
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
@@ -23,6 +21,9 @@ It is worth keeping in mind that I used my Rift S to test any code that I wrote.
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Please keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not, though, you could always check these files to see the full versions of what I will explain here in this post.
 [VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/vrmanager.rar)
 
+### Showcase
+Here is a little demo of what it will look like in the end. I do have some models rendering here but it still shows nicely of what it will look like at the end.
+![[VR.mp4]]
 ## Requirements
 - Visual Studio (or another environment for programming)
 - VR headset compatible with OpenXR
@@ -32,8 +33,8 @@ For those wishing to skip straight to the end and/or take a look at my code, I b
 
 So the first step to any project, deciding on what you want to make and setting up some milestones for yourself. These don't always have to be time-bound, but in my case, since this is for school, I have 1 milestone every 2 weeks excluding the first week, so week 3, 5 and 7 all had milestones attached to them.
 For me, the end result was that I wanted to be able to render a scene to my VR headset and be able to move around some physics objects with my hands. I also wanted to add some basic movement, which at the time I hadn't exactly decided on yet, but I did know that simple walking around when moving the thumbstick would be the easiest and thus most likely to be implemented. For being able to use physics, I was going to use the Jolt library, which is a library can deal with the physics calculations.
-Now, there are multiple libraries that can be used to implement VR into a custom engine in C++. The two main ones I looked at were OpenVR (https://github.com/ValveSoftware/openvr) and the C++ version of OpenXR (https://github.com/KhronosGroup/OpenXR-Hpp).
-I did some research on this topic (which isn't releveant here) and in the end, I decided upon using OpenXR. I had worked with it in the past, though that was in Unity and using C#.
+Now, there are multiple libraries that can be used to implement VR into a custom engine in C++. The two main ones I looked at were [OpenVR](https://github.com/ValveSoftware/openvr) and the C++ version of [OpenXR](https://github.com/KhronosGroup/OpenXR-Hpp).
+I did some research on this topic (which isn't relevant here) and in the end, I decided upon using OpenXR. I had worked with it in the past, though that was in Unity and using C#.
 Below here will show my original milestones as well as what changed over time due to circumstances.
 ```
 Week 3 milestone: Implement the OpenXR library for using the VR capabilities and have the 3D sample scene rendered to the headset
@@ -492,8 +493,340 @@ Then we actually create the sources, quite straight-forward. We attempt to creat
 Next we will create the reference space, this will give the user the data that they need in order to position the player properly. In this case, we will be using a local reference space, since this still does most of the tracking properly for us, but can also auto-adjust slightly, which is more helpful for a seated experience and also if the user temporarily loses tracking or light or something, the program can still attempt to adjust itself.
 There are also View and Stage spaces, both of which have their own uses, [which are worth checking out here.](https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XrSpace)
 
+```cpp
+ // Explicitly begin the session
+ XrSessionBeginInfo sessionBeginInfo = {XR_TYPE_SESSION_BEGIN_INFO};
+ sessionBeginInfo.primaryViewConfigurationType = XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO;
+
+ result = xrBeginSession(m_session, &sessionBeginInfo);
+ if (result != XR_SUCCESS)
+ {
+     std::cerr << "Failed to begin session. Error code: " << result << std::endl;
+     return false;
+ }
+
+ return true;
+```
+Lastly, we will begin the actual session, this will allow us to start actually doing our rendering and other VR things (if you'd implement those, we only do rendering for this post).
+
+#### CreateSwapChains()
+```cpp
+// Query the number of views required for the selected configuration
+uint32_t viewCountOutput;
+XrResult result =
+    xrEnumerateViewConfigurationViews(m_instance, m_systemId, m_viewConfigTypes[0], 0, &viewCountOutput, nullptr);
+if (result != XR_SUCCESS)
+{
+    std::cerr << "Failed to enumerate view configuration views" << std::endl;
+    return false;
+}
+
+std::vector<XrViewConfigurationView> viewConfigViews(viewCountOutput, {XR_TYPE_VIEW_CONFIGURATION_VIEW});
+result = xrEnumerateViewConfigurationViews(m_instance,
+                                           m_systemId,
+                                           m_viewConfigTypes[0],
+                                           viewCountOutput,
+                                           &viewCountOutput,
+                                           viewConfigViews.data());
+if (result != XR_SUCCESS)
+{
+    std::cerr << "Failed to retrieve view configuration views" << std::endl;
+    return false;
+}
+    // Update the view count and resize necessary storage
+    m_viewCount = viewCountOutput;
+    m_views.resize(m_viewCount, {XR_TYPE_VIEW});
+    m_swapchains.resize(m_viewCount);
+    m_swapchainDimensions.resize(m_viewCount);
+    m_swapchainImages.resize(m_viewCount);
+```
+Here we gather data for the view configuration views, this might seem a bit odd since we did something similar before, however, these ones are the views, rather than the configurations and types which is what we did before in the GetViewConfigurationViews(). Once again, we get the amount of viewConfigViews and then fill that vector with the data we gathered, if anything goes wrong, we will log this.
+
+```cpp
+// Create swapchains for each view
+for (uint32_t i = 0; i < m_viewCount; ++i)
+{
+    const auto& viewConfig = viewConfigViews[i];
+
+    XrSwapchainCreateInfo swapchainInfo = {XR_TYPE_SWAPCHAIN_CREATE_INFO};
+    swapchainInfo.usageFlags = XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT | XR_SWAPCHAIN_USAGE_SAMPLED_BIT;
+    swapchainInfo.format = GL_RGBA8;  // Verify this format with your OpenGL context
+    swapchainInfo.sampleCount = 1;
+    swapchainInfo.width = viewConfig.recommendedImageRectWidth;
+    swapchainInfo.height = viewConfig.recommendedImageRectHeight;
+    swapchainInfo.faceCount = 1;
+    swapchainInfo.arraySize = 1;
+    swapchainInfo.mipCount = 1;
+
+    result = xrCreateSwapchain(m_session, &swapchainInfo, &m_swapchains[i]);
+    if (result != XR_SUCCESS)
+    {
+        std::cerr << "Failed to create swapchain for view " << i << std::endl;
+        return false;
+    }
+
+    // Store the dimensions
+    int width = swapchainInfo.width;
+    int height = swapchainInfo.height;
+    m_swapchainDimensions[i] = {width, height};
+
+    uint32_t imageCount;
+    result = xrEnumerateSwapchainImages(m_swapchains[i], 0, &imageCount, nullptr);
+    if (result != XR_SUCCESS)
+    {
+        std::cerr << "Failed to enumerate swapchain images for view " << i << std::endl;
+        return false;
+    }
+
+    // Resize the inner vector to hold images for this view
+    m_swapchainImages[i].resize(imageCount, {XR_TYPE_SWAPCHAIN_IMAGE_OPENGL_KHR});
+
+    // Retrieve the images
+    result = xrEnumerateSwapchainImages(m_swapchains[i],
+                                        imageCount,
+                                        &imageCount,
+                                        reinterpret_cast<XrSwapchainImageBaseHeader*>(m_swapchainImages[i].data()));
+    if (result != XR_SUCCESS)
+    {
+        std::cerr << "Failed to retrieve swapchain images for view " << i << std::endl;
+        return false;
+    }
+}
+```
+This for-loop sets up the swap chains for us, it gets the information it requires, such as the width and height of the screens, the images that need to be prepared and fills the swapchainImages with the data for that eye.
+Do keep in mind that depending on what device you are using, you may have more or less images per eye. For the Rift S for instance, I get 3 per eye, meaning that the swapchainImages vector contains 2 vectors, 1 per eye, each with 3 images each.
+
+```cpp
+ // Ensure that the OpenGL context and swapchain images are compatible
+ for (uint32_t i = 0; i < m_viewCount; ++i)
+ {
+     for (const auto& image : m_swapchainImages[i])
+     {
+         // if image has not been set up properly, set it up
+         if (!glIsTexture(image.image))
+         {
+             std::cerr << "Swapchain image for view " << i << " is not a valid OpenGL texture: " << image.image << std::endl;
+             return false;
+         }
+     }
+ }
+
+ return true;
+```
+This last part is to make sure that the images are compatible with OpenGL's textures. This is not required and it should all work just fine without this, but this is more like a failsafe just in case something went wrong with OpenGL's setup for OpenXR.
+
+
+So, that was it, the entire Initialize() function should now no longer give you any errors for functions that aren't found!
+
+#### Update()
+```cpp
+void VrManager::Update()
+{
+    Render();
+}
+```
+In the update function, we only render. Usually in here you might want to do things like doing the controller tracking, or other VR functionality.
+
+#### PollEvents()
+```cpp
+void VrManager::PollEvents()
+{
+    XrEventDataBuffer eventData = {XR_TYPE_EVENT_DATA_BUFFER};
+    while (xrPollEvent(m_instance, &eventData) == XR_SUCCESS)
+    {
+        switch (eventData.type)
+        {
+            case XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED:
+            {
+                auto stateEvent = reinterpret_cast<XrEventDataSessionStateChanged*>(&eventData);
+                m_sessionState = stateEvent->state;
+
+                // Handle session state transitions
+                if (m_sessionState == XR_SESSION_STATE_READY)
+                {
+                    XrSessionBeginInfo beginInfo = {XR_TYPE_SESSION_BEGIN_INFO};
+                    beginInfo.primaryViewConfigurationType = XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO;
+                    xrBeginSession(m_session, &beginInfo);
+                }
+                else if (m_sessionState == XR_SESSION_STATE_STOPPING)
+                {
+                    xrEndSession(m_session);
+                }
+                break;
+            }
+
+            default:
+                return;
+        }
+    }
+}
+```
+Since the render function will be the biggest function, let's first take care of the PollEvents function.
+In here, we basically request OpenXR for any potential event, things that have changed since we last checked. We only need to handle 1 type of event, which is if the session's state has changed, but this function could also be used for input, if there are events that are lost or some other events, for more events, [you can check this page here.](https://registry.khronos.org/OpenXR/specs/1.1/man/html/xrPollEvent.html)
+What we do once a session state has changed, is that we check what the current state of the session is, if it is ready, we begin a session, like we did earlier. If it is stopping, we end the session.
+
+
+Next up, the fun stuff:
+#### Render()
+Here's where the magic truly starts (well not really, we are programmers, not magicians), we set up OpenXR with all the components required to render images, now it is time to actually render it, well, after we do some more checks of course!
+```cpp
+ // Poll OpenXR events
+ PollEvents();
+
+ // Exit if session is not in a renderable state
+ if (m_sessionState != XR_SESSION_STATE_READY && m_sessionState != XR_SESSION_STATE_SYNCHRONIZED &&
+     m_sessionState != XR_SESSION_STATE_VISIBLE && m_sessionState != XR_SESSION_STATE_FOCUSED)
+ {
+     return;
+ }
+
+ // Wait for the next frame
+ XrFrameWaitInfo beginWaitInfo = {XR_TYPE_FRAME_WAIT_INFO};
+ XrFrameState frameState = {XR_TYPE_FRAME_STATE};
+ if (xrWaitFrame(m_session, &beginWaitInfo, &frameState) != XR_SUCCESS)
+ {
+     return;
+ }
+
+ // Begin the frame
+ XrFrameBeginInfo beginInfo = {XR_TYPE_FRAME_BEGIN_INFO};
+ if (xrBeginFrame(m_session, &beginInfo) != XR_SUCCESS)
+ {
+     return;
+ }
+```
+First we will poll events, just to make sure nothing changed or went wrong and then we do some more checks. We make sure that the session state is ready, synchronized, visible and focussed, basically, the session state has to be ready for us to use OpenXR's systems.
+Then we wait for the frame to be ready and then begin the frame.
+
+```cpp
+// Prepare to render each view
+std::vector<XrCompositionLayerProjectionView> projectionViews;
+std::vector<XrCompositionLayerBaseHeader*> layers;
+if (!m_views.empty())
+{
+    projectionViews.resize(m_views.size());
+
+    for (size_t i = 0; i < m_views.size(); ++i)
+    {
+        // Locate the views (headset position and orientation)
+        XrViewLocateInfo viewLocateInfo = {XR_TYPE_VIEW_LOCATE_INFO};
+        viewLocateInfo.viewConfigurationType = XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO;
+        viewLocateInfo.displayTime = frameState.predictedDisplayTime;
+        viewLocateInfo.space = m_referenceSpace;
+
+        XrViewState viewState = {XR_TYPE_VIEW_STATE};
+        uint32_t viewCountOutput;
+        xrLocateViews(m_session, &viewLocateInfo, &viewState, (uint32_t)m_views.size(), &viewCountOutput, m_views.data());
+
+        // Acquire swapchain image
+        XrSwapchain swapchain = m_swapchains[i];
+        XrSwapchainImageAcquireInfo acquireInfo = {XR_TYPE_SWAPCHAIN_IMAGE_ACQUIRE_INFO};
+        uint32_t imageIndex;
+        xrAcquireSwapchainImage(swapchain, &acquireInfo, &imageIndex);
+
+        XrSwapchainImageWaitInfo waitInfo = {XR_TYPE_SWAPCHAIN_IMAGE_WAIT_INFO};
+        waitInfo.timeout = XR_INFINITE_DURATION;
+        xrWaitSwapchainImage(swapchain, &waitInfo);
+```
+Here we first create some vectors that will be filled with temporary data, our projectionViews and layers.
+after that, we, as the comment suggests, locate the views and space, we basically ask OpenXR the position as well as rotation of the views. We can use this later to render both eyes separately, as they will each have a slight offset, mimicking the natural separation between human eyes to create the illusion of depth. We also wait for the swapchainImage to be acquired. The waitInfo.timeout "indicates how many nanoseconds the call **may** block waiting for the image to become available for writing", and thus, if restrictions on how long this is allowed to be waiting for need to be in place, you can set the duration to a specific amount.
+
+```cpp
+// Set up projection view
+projectionViews[i] = {XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW};
+projectionViews[i].pose = m_views[i].pose;
+projectionViews[i].fov = m_views[i].fov;
+projectionViews[i].subImage.swapchain = swapchain;
+projectionViews[i].subImage.imageRect.offset = {0, 0};
+projectionViews[i].subImage.imageRect.extent = {m_swapchainDimensions[i].width, m_swapchainDimensions[i].height};
+projectionViews[i].subImage.imageArrayIndex = 0;
+
+// I looked at and compared Javier's code for how he renders the eyes and did it slightly differently
+const glm::vec3 eyeWorldPos = XrVec3ToGLMVec3(m_views[i].pose.position);
+const glm::vec4 eyeWorldRot = XrQuatToGLMVec4(m_views[i].pose.orientation);
+
+for (const auto& [e, camera, cameraTransform] :
+     bee::Engine.ECS().Registry.view<bee::Camera, bee::Transform>().each())
+{
+    // Rot and pos
+    cameraTransform.SetRotation(glm::quat(eyeWorldRot.w, eyeWorldRot.x, eyeWorldRot.y, eyeWorldRot.z));
+    cameraTransform.SetTranslation(eyeWorldPos);
+
+    // Projection
+    XrMatrix4x4f xrProj;
+    XrMatrix4x4f_CreateProjectionFov(&xrProj, m_views[i].fov, 0.01f, 100.0f);
+    XrMatrix4x4f_To_glm_mat4x4(camera.Projection, xrProj);
+}
+```
+This code was from a classmate of mine, but I will explain it to the best of my abilities regardless.
+First we set up the projection view for each eye, what this does is basically slightly offset the eye to be in the place it should. Rather than having one "view" like PC games, we have 2 views here that are slightly offset to, like I stated before, mimic how real eyes work as well. After receiving all that data, we have to convert it to something that OpenGL can use, thus the conversion to glm data types.
+After that there is a for-loop that goes through each camera. I use Entt here, which is a library for managing entities and it might seem a little complicated for those unexperienced with it, but all it does is get my camera and its transform, nothing more. So if you are going to follow this tutorial by copy-pasting (which I can't really blame you for to be honest), make sure to remove the for-loop and replace it with a private variable for the projection that you save in the header and then modify here since the Camera class only has a glm::mat4 Projection, and that is it, although you will have to use this projection in your renderer, so keep that in mind. We set the camera's position (translation) and rotation and create the projection for it as well.
+
+```cpp
+m_renderer->Render();
+```
+Here I call my render function from my renderer. The data has all been set up properly and my renderer uses the projection from my camera.
+
+```cpp
+ // Copy the rendered image to the swapchain framebuffer
+ GLuint sourceFramebuffer = m_renderer->GetFinalBuffer();
+ glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebuffer);
+ GLuint swapchainFramebuffer;
+ glGenFramebuffers(1, &swapchainFramebuffer);
+ glBindFramebuffer(GL_DRAW_FRAMEBUFFER, swapchainFramebuffer);
+
+ glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER,
+                        GL_COLOR_ATTACHMENT0,
+                        GL_TEXTURE_2D,
+                        m_swapchainImages[i][imageIndex].image,
+                        0);
+
+ if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+ {
+     std::cerr << "Swapchain framebuffer is not complete!" << std::endl;
+ }
+
+ glBlitFramebuffer(0,
+                   0,
+                   m_swapchainDimensions[i].width,
+                   m_swapchainDimensions[i].height,  // Source dimensions
+                   0,
+                   0,
+                   m_viewConfigViews[i].recommendedImageRectWidth,
+                   m_viewConfigViews[i].recommendedImageRectHeight,
+                   GL_COLOR_BUFFER_BIT,
+                   GL_NEAREST);
+
+ glBindFramebuffer(GL_FRAMEBUFFER, 0);
+ glDeleteFramebuffers(1, &swapchainFramebuffer);
+ 
+            // Release the swapchain image
+XrSwapchainImageReleaseInfo releaseInfo = {XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO};
+xrReleaseSwapchainImage(swapchain, &releaseInfo);
+}
+```
+Here we get the framebuffer from our renderer that has been prepared with the image for this eye and blit that to our swapchain's framebuffer that is generated here. What blitting is, is just copying pixels from one source to another, so in this case, from our sourceFrameBuffer to our swapchainFrameBuffer and release that data to the swapchain.
+
+```cpp
+    // End the frame
+    XrFrameEndInfo endInfo = {XR_TYPE_FRAME_END_INFO};
+    endInfo.displayTime = frameState.predictedDisplayTime;
+    endInfo.environmentBlendMode = XR_ENVIRONMENT_BLEND_MODE_OPAQUE;
+    endInfo.layerCount = (uint32_t)layers.size();
+    endInfo.layers = layers.empty() ? nullptr : layers.data();
+    xrEndFrame(m_session, &endInfo);
+}
+```
+After the eyes have been rendered and the swapchain images are prepared, we end the XrFrame with the data it needs.
+
+
+#### Conclusion
+And that's it!
+If you start up the project, assuming all of this has been followed and your own code has been added for the rendering, it should now render to your headset!
+
+If you have any questions or parts that do not work, do not hesitate to e-mail me!
+I hope this post was helpful and gave you the help you needed to set up OpenXR for your project.
 ## Sources
-- TODO (I will be adding some more sources here for people who want to learn more about OpenXR)
 - [Helpful example of a main script: https://github.com/KHeresy/openxr-simple-example/blob/master/main.cpp,](https://github.com/KHeresy/openxr-simple-example/blob/master/main.cpp)
 - [Official tutorial: https://openxr-tutorial.com//windows/opengl/1-introduction.html#introduction](https://openxr-tutorial.com//windows/opengl/1-introduction.html#introduction)
-- [Official site for extensions (and more): https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#extension-appendices-list](https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#extension-appendices-list)
+- [Official site for extensions (and more): https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#introductiont](https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#introduction)
