@@ -22,8 +22,8 @@ For those wishing to skip straight to the end and/or take a look at my code, I b
 [VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/vrmanager.rar)
 
 ### Showcase
-Here is a little demo of what it will look like in the end. I do have some models rendering here but it still shows nicely of what it will look like at the end.
-![[VR.mp4]]
+Here is a little demo of what it will look like in the end. I do have some models rendering here but it still shows nicely of what it will look like at the end. 
+|{% include embed/video.html src='{../assets/VR.mp4}' %}|
 ## Requirements
 - Visual Studio (or another environment for programming)
 - VR headset compatible with OpenXR
