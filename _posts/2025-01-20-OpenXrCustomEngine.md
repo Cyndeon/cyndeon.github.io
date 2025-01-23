@@ -8,11 +8,11 @@ tags:
   - cpp
   - openxr
   - opengl
-  - entt
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 ---
 # This blog post is unfinished and still a work in progress!
+# Note to self: Add vid and screenshot in the intro!
 ## Intro
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
@@ -20,8 +20,8 @@ During the process of implementing OpenXR I have learned a lot about not only Op
 
 It is worth keeping in mind that I used my Rift S to test any code that I wrote. While OpenXR does support most, if not all major headsets, some things might work differently based on the headset you use.
 
-For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Do keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not.
-[VrManager](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/vrmanager.rar)
+For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Please keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not, though, you could always check these files to see the full versions of what I will explain here in this post.
+[VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/vrmanager.rar)
 
 ## Requirements
 - Visual Studio (or another environment for programming)
@@ -237,6 +237,10 @@ Now we've got some functions to properly set up and use the variables we just cr
 
 ### Creating the functions
 I will start from the top and work my way through each function, one at a time.
+If you would prefer to create one function at a time, you can click the headers on the side of screen and jump between them.
+
+
+#### VrManager() (constructor)
 First, the constructor, it's very short and simple. I call the Initialize() function that will set up everything for OpenXR, after that I create the pointer to my renderer but I also give the renderer the dimensions of my swapchain, this is because the framebuffer that the renderer creates should have the same size as the swapchainImages, since those are the ones that will be displayed to the user. I also use the first element in the array which is the left eye, it does not matter whether element 0 or 1 is used since both will have the same dimensions.
 ```cpp
 VrManager::VrManager()
@@ -246,6 +250,7 @@ VrManager::VrManager()
 }
 ```
 
+#### Initialize() 
 Since the Initialize() function is rather big, I will go through it step by step to make it more digestible.
 
 ```cpp
@@ -297,4 +302,198 @@ if (result == XR_SUCCESS && pfnGetOpenGLGraphicsRequirementsKHR)
     }
 }
 ```
-Here we set up the configuration views and we also make sure 
+Here we set up the configuration views, get the system's properties and we also make sure that the graphics requirements are met for the device to be able to run VR.
+
+```cpp
+ result = CreateSession();
+ if (!result)
+ {
+     std::cerr << "Session creation failed" << std::endl;
+     return false;
+ }
+
+ result = CreateSwapchains();
+ if (!result)
+ {
+     std::cerr << "Swapchain creation failed" << std::endl;
+     return false;
+ }
+
+ return true;
+```
+Lastly, we'll create the session, set up the swapchains and finally return true if nothing went wrong during the entire setup.
+
+Now that we have set all of that up, it is time to fill those functions!
+
+#### CreateInstance()
+```cpp
+bool VrManager::CreateInstance()
+{
+    const char* extensions[] = {"XR_KHR_opengl_enable"};
+
+    XrInstanceCreateInfo createInfo = {XR_TYPE_INSTANCE_CREATE_INFO};
+    createInfo.enabledExtensionCount = 1;
+    createInfo.enabledExtensionNames = extensions;
+    strcpy(createInfo.applicationInfo.applicationName, "VR Application");
+    createInfo.applicationInfo.apiVersion = XR_CURRENT_API_VERSION;
+
+    XrResult result = xrCreateInstance(&createInfo, &m_instance);
+    if (result != XR_SUCCESS)
+    {
+        std::cerr << "Failed to create OpenXR instance" << std::endl;
+        return false;
+    }
+    return true;
+}
+```
+In this function, we create the instance for OpenXR, this is also where extra extensions can be enabled for specific rendering libraries such as OpenGL (like we are using in this example), OpenGL_ES or Vulkan, but also more platform specific ones that can enable hand-tracking, body tracking, face tracking and more, if your device can use those functions of course.
+For more information about what extensions are available, [there is a list of them available on their site here.](https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#extension-appendices-list)
+
+#### GetSystem()
+```cpp
+bool VrManager::GetSystem()
+{
+    XrSystemGetInfo systemInfo = {XR_TYPE_SYSTEM_GET_INFO};
+    systemInfo.formFactor = XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY;
+
+    XrResult result = xrGetSystem(m_instance, &systemInfo, &m_systemId);
+    if (result != XR_SUCCESS)
+    {
+        std::cerr << "Failed to get XR system, make sure a headset is connected" << std::endl;
+        return false;
+    }
+    return true;
+}
+```
+Here we simply ask for the headset's information and ID we'll need to use later.
+
+#### GetViewConfigurationViews()
+This one is a little larger so let's go through this step by step
+```cpp
+void VrManager::GetViewConfigurationViews()
+{
+    // Gets the View Configuration Types. The first call gets the count of the array that will be returned. The next call fills
+    // out the array.
+    uint32_t viewConfigurationCount = 0;
+    xrEnumerateViewConfigurations(m_instance, m_systemId, 0, &viewConfigurationCount, nullptr);
+    m_viewConfigTypes.resize(viewConfigurationCount);
+    xrEnumerateViewConfigurations(m_instance,
+                                  m_systemId,
+                                  viewConfigurationCount,
+                                  &viewConfigurationCount,
+                                  m_viewConfigTypes.data());
+```
+First we enumerate the configurations to see how many there need to be, that is why we give a nullptr the first time around. We then resize the vector we want to fill with the amount of view configurations there will be before enumerating again and now filling the vector with all these configurations. This "enumerate twice, once for size, once for contents" will be a recurring subject throughout the setup process.
+
+```cpp
+ // Pick the first application supported View Configuration Type con supported by the hardware.
+ for (const XrViewConfigurationType& viewConfiguration : m_viewConfigTypes)
+ {
+     if (std::find(m_viewConfigTypes.begin(), m_viewConfigTypes.end(), viewConfiguration) != m_viewConfigTypes.end())
+     {
+         m_viewConfig = viewConfiguration;
+         break;
+     }
+ }
+ if (m_viewConfig == XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM)
+ {
+     std::cerr << "Failed to find a view configuration type. Defaulting to XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO."
+               << std::endl;
+     m_viewConfig = XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO;
+ }
+```
+Here we go through the view configurations and, like the comment states, find the first one that is supported and set the default view configuration (m_viewConfig) to that one. We then will check if m_viewConfig is still the default value we set it to (XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM), in which case something likely went wrong with getting the configs, however, we can still set it to primary_stereo as the default since that is the view configuration that is most often and assuming everything else works, this should work regardless. It is a good thing to debug since this might cause issues later, but it isn't something that will make the entire thing not work, thus, a simple std::cerr rather than a return.
+
+```cpp
+ // Gets the View Configuration Views. The first call gets the count of the array that will be returned. The next call fills
+ // out the array.
+ uint32_t viewConfigurationViewCount = 0;
+ xrEnumerateViewConfigurationViews(m_instance, m_systemId, m_viewConfig, 0, &viewConfigurationViewCount, nullptr);
+ m_viewConfigViews.resize(viewConfigurationViewCount, {XR_TYPE_VIEW_CONFIGURATION_VIEW});
+ xrEnumerateViewConfigurationViews(m_instance,
+                                   m_systemId,
+                                   m_viewConfig,
+                                   viewConfigurationViewCount,
+                                   &viewConfigurationViewCount,
+                                   m_viewConfigViews.data());
+```
+
+#### CreateSession()
+So everything thus far has been set up correctly and we are ready to create the session!
+Another big function upcoming (that could potentially be split up into smaller functions if one would prefer that).
+```cpp
+    // Verify OpenGL context exists
+    HGLRC currentContext = wglGetCurrentContext();
+    HDC currentDC = wglGetCurrentDC();
+
+    if (currentContext == NULL || currentDC == NULL)
+    {
+        std::cerr << "No active OpenGL context found!" << std::endl;
+        std::cerr << "Current Context: " << currentContext << ", Current DC: " << currentDC << std::endl;
+        return false;
+    }
+
+    // Get OpenGL version
+    const char* glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+    const char* glRenderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+
+    std::cout << "OpenGL Version: " << (glVersion ? glVersion : "Unknown") << std::endl;
+    std::cout << "OpenGL Renderer: " << (glRenderer ? glRenderer : "Unknown") << std::endl;
+
+    // Create the graphics binding structure
+    XrGraphicsBindingOpenGLWin32KHR graphicsBinding = {XR_TYPE_GRAPHICS_BINDING_OPENGL_WIN32_KHR};
+    graphicsBinding.hDC = wglGetCurrentDC();
+    graphicsBinding.hGLRC = wglGetCurrentContext();
+
+    XrSessionCreateInfo sessionCreateInfo = {XR_TYPE_SESSION_CREATE_INFO};
+    sessionCreateInfo.systemId = m_systemId;
+    sessionCreateInfo.next = &graphicsBinding;
+```
+First we have some functions set up to make sure OpenGL exists, this part is specific to this project since it uses OpenGL and thus will be different for other rendering libraries. the last part also is specific to my device as you can tell, it is for OpenGL and Windows, thus, this might also be different, keep that in mind!
+The last part also sets up the graphics binding, basically telling the session what is next in the structure chain, this is something that "in most cases one graphics API extension specific struct needs to be in this next chain." [as stated here.](https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XrSessionCreateInfo)
+
+```cpp
+ XrResult result = xrCreateSession(m_instance, &sessionCreateInfo, &m_session);
+ if (result != XR_SUCCESS)
+ {
+     std::cerr << "Failed to create session. Error code: " << result << std::endl;
+
+     // Additional error diagnostics
+     switch (result)
+     {
+         case XR_ERROR_GRAPHICS_DEVICE_INVALID:
+             std::cerr << "Graphics device is invalid" << std::endl;
+             break;
+         case XR_ERROR_RUNTIME_FAILURE:
+             std::cerr << "Runtime failure during session creation" << std::endl;
+             break;
+         default:
+             std::cerr << "Unknown session creation error" << std::endl;
+     }
+     return false;
+ }
+```
+Then we actually create the sources, quite straight-forward. We attempt to create a session, and if it goes wrong, we get slightly detailed information about what exactly went wrong, whether it is the graphics, runtime or a different error.
+
+```cpp
+ // Create reference space
+ XrReferenceSpaceCreateInfo referenceSpaceInfo = {XR_TYPE_REFERENCE_SPACE_CREATE_INFO};
+ referenceSpaceInfo.referenceSpaceType = XR_REFERENCE_SPACE_TYPE_LOCAL;
+ referenceSpaceInfo.poseInReferenceSpace.orientation.w = 1.0f;
+ referenceSpaceInfo.poseInReferenceSpace.position = {0.0f, 0.0f, 0.0f};
+
+ result = xrCreateReferenceSpace(m_session, &referenceSpaceInfo, &m_referenceSpace);
+ if (result != XR_SUCCESS)
+ {
+     std::cerr << "Failed to create reference space" << std::endl;
+     return false;
+ }
+```
+Next we will create the reference space, this will give the user the data that they need in order to position the player properly. In this case, we will be using a local reference space, since this still does most of the tracking properly for us, but can also auto-adjust slightly, which is more helpful for a seated experience and also if the user temporarily loses tracking or light or something, the program can still attempt to adjust itself.
+There are also View and Stage spaces, both of which have their own uses, [which are worth checking out here.](https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XrSpace)
+
+## Sources
+- TODO (I will be adding some more sources here for people who want to learn more about OpenXR)
+- [Helpful example of a main script: https://github.com/KHeresy/openxr-simple-example/blob/master/main.cpp,](https://github.com/KHeresy/openxr-simple-example/blob/master/main.cpp)
+- [Official tutorial: https://openxr-tutorial.com//windows/opengl/1-introduction.html#introduction](https://openxr-tutorial.com//windows/opengl/1-introduction.html#introduction)
+- [Official site for extensions (and more): https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#extension-appendices-list](https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#extension-appendices-list)
