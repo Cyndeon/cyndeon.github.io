@@ -10,6 +10,7 @@ tags:
   - opengl
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
+media_subpath: /assets/
 ---
 ## Intro
 
@@ -23,7 +24,7 @@ For those wishing to skip straight to the end and/or take a look at my code, I b
 
 ### Showcase
 Here is a little demo of what it will look like in the end. I do have some models rendering here but it still shows nicely of what it will look like at the end. 
-|{% include embed/video.html src='{../assets/VR.mp4}' %}|
+|{% include embed/video.html src='{VR.mp4}' %}|
 ## Requirements
 - Visual Studio (or another environment for programming)
 - VR headset compatible with OpenXR
