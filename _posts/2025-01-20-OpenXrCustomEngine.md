@@ -97,7 +97,7 @@ The header will be explained first.
 
 ### Includes
 
-First the includes. In my header I include the following:
+First the includes. In my header I include the following in the header file:
 ```cpp
 #pragma once
 #include <string>
@@ -109,8 +109,7 @@ First the includes. In my header I include the following:
 #include <openxr/openxr.h>
 #include <openxr/openxr_platform.h>
 
-#include <entt//entity/entity.hpp>
-
+// math related libraries
 #include <glad/glad.h>
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
@@ -122,6 +121,18 @@ First the includes. In my header I include the following:
 
 As shown here, I include some basic C++ things like strings and vectors, but also OpenXR and some Glad for math, you are free to use whatever math library you'd like, though you might have to create your own conversion functions to accommodate for this. 
 
+Here are the includes for the cpp file:
+```cpp
+#include "vr/vrmanager.hpp"
+
+#include <iostream>
+
+#include <GLFW/glfw3.h>
+#include <Windows.h>
+#include <cassert>
+#include <glm/gtc/quaternion.hpp>
+```
+The header file is important to include in the cpp file of course, as well as some that we will need to debug like iostream and cassert and the other ones we also need for some other functionaility.
 ### Variables
 
 After that, we will need a couple of variables, so it should look something like this:
