@@ -1,0 +1,14 @@
+{
+  "simple-code-formatter:simple_code_formatter": [
+    {
+      "modifiers": [],
+      "key": "F3"
+    }
+  ],
+  "prettier:format-selection": [
+    {
+      "modifiers": [],
+      "key": "F3"
+    }
+  ]
+}

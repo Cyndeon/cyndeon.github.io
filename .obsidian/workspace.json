@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "5e1bee87ced53566",
+        "id": "8fe401157aa9e198",
         "type": "tabs",
         "children": [
           {
-            "id": "685d872682c8fed7",
+            "id": "e0fa68b787249225",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2025-01-20-OpenXrCustomEngine.md",
+                "file": "_tabs/portfolio.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "2025-01-20-OpenXrCustomEngine"
+              "title": "portfolio"
             }
           }
         ]
@@ -40,7 +40,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -162,23 +163,35 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "685d872682c8fed7",
+  "active": "e0fa68b787249225",
   "lastOpenFiles": [
-    "assets/Colored.png",
-    "assets/ColoredHeader.png",
-    "Gemfile.lock",
-    "assets/VR.mp4",
-    "_posts/2025-01-20-OpenXrCustomEngine.md",
-    "assets/Justin.jpg",
     "_tabs/about.md",
-    "assets/__rar_38744.39111",
-    "assets/__rar_38744.38383",
-    "assets/__rar_4040.20744",
-    "assets/__rar_4040.18916",
-    "assets/vrmanager.rar",
-    "_tabs/tags.md",
-    "_tabs/categories.md",
+    "_site/about/index.html",
+    "_site/about",
+    "_site/tabs/about.md",
+    "_site/tabs",
+    "_site/assets/AboutMe/DieselAndME.jpeg",
+    "_site/assets/AboutMe",
+    "assets/AboutMe/DieselAndME.jpeg",
+    "assets/AboutMe",
+    "assets/New folder",
     "_tabs/archives.md",
+    "_tabs/categories.md",
+    "_tabs/portfolio.md",
+    "_posts/2025-01-20-OpenXrCustomEngine.md",
+    "_site/assets/Thumbnails/Ortus.png",
+    "assets/Thumbnails/Ortus.png",
+    "assets/Thumbnails/Ortus.png.opdownload",
+    "_site/assets/Thumbnails/Beautiful.png",
+    "assets/Thumbnails/Beautiful.png",
+    "assets/Thumbnails/Beautiful.png.opdownload",
+    "_site/assets/Thumbnails/UnityVrDemo.png",
+    "assets/Thumbnails/UnityVrDemo.png",
+    "_site/assets/Thumbnails/VrUnityDemo.png",
+    "assets/Thumbnails/VrUnityDemo.png",
+    "assets/Thumbnails/VrUnityDemo.png.opdownload",
+    "assets/Thumbnails/PatientZero.png.opdownload",
+    "_tabs/tags.md",
     "README.md"
   ]
 }
