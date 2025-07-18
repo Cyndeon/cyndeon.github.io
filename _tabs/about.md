@@ -2,6 +2,11 @@
 icon: fas fa-info-circle
 order: 5
 ---
+{% assign birth_date = '2003-03-04' | date: '%s' %}
+{% assign now = 'now' | date: '%s' %}
+{% assign seconds_in_year = 31556952 %}
+{% assign age = now | minus: birth_date | divided_by: seconds_in_year | floor %}
+
 <!-- About Me Section with Flexbox Layout -->
 <div style="display: flex; align-items: center; padding: 10px;">
 
@@ -20,7 +25,7 @@ order: 5
         <p style="font-size: 20px; font-weight: bold; margin-top: 200px;">
             Hi, I'm Justin Comans, and welcome to my website!<br><br>
 
-            At 21 years old, I have a deep passion for programming and game development. <br><br>
+            At {{ age }} years old, I have a deep passion for programming and game development. <br><br>
 
             With experience in C# and C++, I’ve worked with both Unity and Unreal Engine 5 to bring many fantastic ideas to life. <br><br>
 
@@ -38,11 +43,13 @@ order: 5
     <li>C++ Development</li>
     <li>Unity (3D and 2D)</li>
     <li> Vr game development</li>
-    <li>OpenXR (using Unity and a custom C++ engine)</li>
+    <li>OpenXR (mainly with Unity)</li>
     <li>Unreal Engine 5</li>
-    <li>Game Design</li>
     <li>Software Architecture</li>
     <br>
 	<li> Teamwork</li>
 	<li> Communication</li>
+	<li> Lead Programmer</li>
+	<li> Fluent English</li>
+	<li> Fluent Dutch</li>
 </ul>

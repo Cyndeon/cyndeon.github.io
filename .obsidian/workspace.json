@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "2025-01-20-OpenXrCustomEngine"
             }
+          },
+          {
+            "id": "b7887de8efcf0bf3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_tabs/about.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "about"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -163,35 +178,35 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "e0fa68b787249225",
+  "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
-    "_tabs/portfolio.md",
-    "_tabs/about.md",
-    "_site/about/index.html",
-    "_site/about",
-    "_site/tabs/about.md",
-    "_site/tabs",
-    "_site/assets/AboutMe/DieselAndME.jpeg",
-    "_site/assets/AboutMe",
     "assets/AboutMe/DieselAndME.jpeg",
-    "assets/AboutMe",
-    "assets/New folder",
+    "_tabs/portfolio.md",
+    "_site/assets/Thumbnails/Wanderland.png",
+    "assets/Thumbnails/Wanderland.png",
+    "assets/Thumbnails/Wanderland.png.opdownload",
+    "_tabs/about.md",
+    "_site/assets/css/custom_buttons_colors.css",
+    "assets/css/custom_buttons_colors.css",
+    "_site/assets/css/New Text Document.txt",
+    "assets/css/New Text Document.txt",
+    "_site/assets/css/cards_colors_about.css",
+    "assets/css/cards_colors_about.css",
+    "assets/css/cards_colors_about.css.opdownload",
+    "_site/assets/css/cards.css",
+    "assets/css/cards.css",
+    "_posts/2025-01-20-OpenXrCustomEngine.md",
     "_tabs/archives.md",
     "_tabs/categories.md",
-    "_posts/2025-01-20-OpenXrCustomEngine.md",
+    "_tabs/tags.md",
+    "_site/tabs/about.md",
+    "_site/assets/AboutMe/DieselAndME.jpeg",
     "_site/assets/Thumbnails/Ortus.png",
     "assets/Thumbnails/Ortus.png",
-    "assets/Thumbnails/Ortus.png.opdownload",
     "_site/assets/Thumbnails/Beautiful.png",
     "assets/Thumbnails/Beautiful.png",
-    "assets/Thumbnails/Beautiful.png.opdownload",
     "_site/assets/Thumbnails/UnityVrDemo.png",
     "assets/Thumbnails/UnityVrDemo.png",
-    "_site/assets/Thumbnails/VrUnityDemo.png",
-    "assets/Thumbnails/VrUnityDemo.png",
-    "assets/Thumbnails/VrUnityDemo.png.opdownload",
-    "assets/Thumbnails/PatientZero.png.opdownload",
-    "_tabs/tags.md",
     "README.md"
   ]
 }
