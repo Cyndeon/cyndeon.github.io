@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_tabs/about.md",
+                "file": "_tabs/portfolio.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "about"
+              "title": "portfolio"
             }
           }
         ],
@@ -180,12 +180,13 @@
   },
   "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
+    "_tabs/categories.md",
+    "_tabs/about.md",
     "assets/AboutMe/DieselAndME.jpeg",
     "_tabs/portfolio.md",
     "_site/assets/Thumbnails/Wanderland.png",
     "assets/Thumbnails/Wanderland.png",
     "assets/Thumbnails/Wanderland.png.opdownload",
-    "_tabs/about.md",
     "_site/assets/css/custom_buttons_colors.css",
     "assets/css/custom_buttons_colors.css",
     "_site/assets/css/New Text Document.txt",
@@ -197,7 +198,6 @@
     "assets/css/cards.css",
     "_posts/2025-01-20-OpenXrCustomEngine.md",
     "_tabs/archives.md",
-    "_tabs/categories.md",
     "_tabs/tags.md",
     "_site/tabs/about.md",
     "_site/assets/AboutMe/DieselAndME.jpeg",
