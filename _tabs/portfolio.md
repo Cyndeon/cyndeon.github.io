@@ -26,7 +26,7 @@ order: 1 # Adjust based on where you want it in the nav
       <img src="/assets/Thumbnails/PatientZero.png" alt="">
       <h3>Patient Zero (Itch.io)</h3>
       <!--opens in new tab when using target="_blank"-->
-      <a href="https://buas.itch.io/team-cumin" class="card-link" target="_blank"></a>
+      <a href="https://itsnoonytime.itch.io/patient-0" class="card-link" target="_blank"></a>
     </div></div>
 <div class="card-wrapper">
     <div class="project-card">
@@ -46,7 +46,7 @@ order: 1 # Adjust based on where you want it in the nav
       <img src="/assets/Thumbnails/Beautiful.png" alt="">
       <h3>Beautiful - A text adventure</h3>
       <!--opens in new tab when using target="_blank"-->
-      <a href="https://gamejolt.com/games/VR-Minigame-Collection/602509" class="card-link" target="_blank"></a>
+      <a href="https://gamejolt.com/games/Beautiful-text-adventure/473929" class="card-link" target="_blank"></a>
     </div></div>
 
 
