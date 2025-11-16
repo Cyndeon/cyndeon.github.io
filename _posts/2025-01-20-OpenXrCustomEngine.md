@@ -23,6 +23,8 @@ It is worth keeping in mind that I used my Rift S to test any code that I wrote.
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Please keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not, though, you could always check these files to see the full versions of what I will explain here in this post.
 [VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/OpenXrCustomEngine/vrmanager.rar)
 
+I also would like to state that I have used AI for bits of this piece. I wrote the original blog early 2025 (it is late 2025 by the time I am updating this again) and it wasn't in-depth enough to properly explain what everything does, hence, I used AI to help me understand it better as well. It is often easy to just use what you find in the documentation, but this doesn't mean you understand what it does. I did check whether the information given was correct of course, but I still felt like this was important to mention.
+
 ### Showcase
 Here is a little demo of what it will look like in the end. I do have some models rendering here but it still shows nicely of what it will look like at the end. 
 |{% include embed/video.html src='/OpenXrCustomEngine/VR.mp4' %}|
@@ -168,19 +170,21 @@ private:
 }
 ```
 This might look a bit intimidating at first, but when you take a closer look at it, it's not that difficult.
-First of all, the instance and session are vital for the operation of OpenXR in general. The instance "encompasses the application setup state, OpenXR API version and any layers and extensions" while the session itself keeps track of the currently running session while the sessionState keeps will be set to the state of the session.
+First of all, the instance and session are vital for the operation of OpenXR in general. The instance "encompasses the application setup state, OpenXR API version and any layers and extensions" while the session itself keeps track of the currently running session while the sessionState keeps will be set to the state of the session and manages the connection between the application and the VR runtime. The systemId represents the selected VR device (HMD) and is obtained via `xrGetSystem()` after creating the instance.** The sessionState will be updated by the runtime to reflect the current state of the session (idle, ready, running, etc.).
 
-Then you have a bunch of vectors filled with data related to the swapchains, their images and dimensions. The swapchains are very similar to framebuffers, but in this case each eye has a certain amount of swapchain images assigned to it, in my case for the Rift S, each eye has 3 images, meaning I have 6 in total. These images will be swapped out during the next frame " in order to create the illusion of motion within the image."
-That is also why the images are vectors inside of a vector, one vector stores each eye and the other one stores the images inside of the eye.
+Then you have a bunch of vectors filled with data related to the swapchains, their images and dimensions. The swapchains are very similar to framebuffers, but in this case each eye has a certain amount of swapchain images assigned to it, in my case for the Rift S, each eye has 3 images, meaning I have 6 in total. These images implement a multiple-buffering strategy (triple-buffered in this case) to allow the compositor to display one image while the application renders to another, preventing tearing and maintaining consistent frame pacing. Note that `XrSwapchainImageOpenGLKHR` is an OpenGL-specific implementation; other graphics APIs would use different image types (e.g., `XrSwapchainImageVulkanKHR`).
 
-After that, there are the view configurations, they have to do with the way that the camera is rendered in preparation for the swapchainImages.
+After that, there are the view configurations, they have to do with the way that the camera is rendered in preparation for the swapchainImages. More specifically, they define the projection matrix parameters, field of view, and recommended resolution for each view. The `m_viewConfigTypes` vector contains the supported configurations we'll query the runtime for (stereo for two-eye rendering, or mono for single-view), and `m_viewConfig` stores whichever one is actually selected and available on the device.
 
-There is also the XrSpace, this is a class that has to do with the VR tracking in the real world and converting it to data that OpenXR can use, it basically sort of keeps track of your real life space in that sense.
+There is also the XrSpace, this is a class that has to do with the VR tracking in the real world and converting it to data that OpenXR can use, it basically sort of keeps track of your real life space in that sense. More precisely, it represents a spatial reference frame that defines the origin and orientation for pose tracking data. Common types include VIEW (head-locked), LOCAL (room-scale with fixed origin), and STAGE (room-scale with calibrated floor level). More information about this can be found on [this page here](https://registry.khronos.org/OpenXR/specs/1.1/man/html/XrSpace.html)
+
+The `m_viewCount` stores the number of views to render (typically 2 for stereo, 1 for mono), while `m_views` is an array of `XrView` structures that contain per-view pose and field-of-view data, which is updated each frame during rendering.
 
 I also feel like I should mention I have a pointer to a Renderer class, for me, like I explained in the [Requirements](#requirements), I already have a custom engine with a rendering system built-in. For you, this will have to be a function that renders to a framebuffer and then that framebuffer has to be accessible in the VrManager.
 
 
-Now that we have all the variables we are going to need, we can start putting them to use! We'll need some functions to do that, so let's add those first.
+Now that we have all the variables we are going to need, we can start putting them to use! We'll need some functions to do that, so let's add those first. Do not worry about what they do just yet, we will get to that later!  
+Some are quite obvious, as they are just math and conversion functions but preparing the names for the other ones also allows us to keep programming without getting constant errors about missing functions.
 ```cpp
 struct Dimensions
 {
@@ -255,7 +259,7 @@ If you would prefer to create one function at a time, you can click the headers 
 
 
 #### VrManager() (constructor)
-First, the constructor, it's very short and simple. I call the Initialize() function that will set up everything for OpenXR, after that I create the pointer to my renderer but I also give the renderer the dimensions of my swapchain, this is because the framebuffer that the renderer creates should have the same size as the swapchainImages, since those are the ones that will be displayed to the user. I also use the first element in the array which is the left eye, it does not matter whether element 0 or 1 is used since both will have the same dimensions.
+First, the constructor, it's very short and simple. I call the Initialize() function that will set up everything for OpenXR, including creating the instance, selecting the system, establishing the session, and allocating the swapchains with their images. It's critical that Initialize() completes successfully before accessing m_swapchainDimensions, as this data is populated during swapchain creation. After that I create the pointer to my renderer but I also give the renderer the dimensions of my swapchain, this is because the framebuffer that the renderer creates should have the same size as the swapchainImages, since those are the ones that will be displayed to the user. The dimensions must match exactly to avoid scaling artifacts or incorrect aspect ratios when the rendered content is copied to the swapchain images. I also use the first element in the array which is the left eye, it does not matter whether element 0 or 1 is used since both eyes typically have identical dimensions in symmetrical HMDs like the Rift S.
 ```cpp
 VrManager::VrManager()
 {
@@ -282,7 +286,7 @@ if (!result)
     return false;
 }
 ```
-First, the essentials. We create the instance and get the system details, as you can see here, I also have a boolean for result, if at any point, result returns false, something went wrong, we log it, and quit the setup. If your program would require some specific actions to happen if this setup fails, you can modify the constructor to do something if Initialize() returns false.
+First, the essentials. We create the instance which initializes the OpenXR loader and enables any required extensions, and get the system details which queries the runtime for an available VR device that matches our requirements. As you can see here, I also have a boolean for result, if at any point, result returns false, something went wrong, we log it, and quit the setup. If your program would require some specific actions to happen if this setup fails, you can modify the constructor to do something if Initialize() returns false.
 
 ```cpp
 GetViewConfigurationViews();
@@ -316,7 +320,9 @@ if (result == XR_SUCCESS && pfnGetOpenGLGraphicsRequirementsKHR)
     }
 }
 ```
-Here we set up the configuration views, get the system's properties and we also make sure that the graphics requirements are met for the device to be able to run VR.
+Here we set up the configuration views which query the runtime for the supported view configurations and their recommended resolutions, get the system's properties including device name, vendor ID, and hardware capabilities like maximum supported swapchain dimensions, and we also make sure that the graphics requirements are met for the device to be able to run VR. The xrGetInstanceProcAddr call is necessary because graphics API functions are exposed through OpenXR's extension mechanism rather than the core API. This retrieves a function pointer for the OpenGL-specific extension function that validates our OpenGL version and context meet the runtime's minimum requirements.  
+
+Note that the {XR_TYPE_SYSTEM_PROPERTIES} and {XR_TYPE_GRAPHICS_REQUIREMENTS_OPENGL_KHR} initializers set the structure type field, which OpenXR requires to identify structure types at runtime for versioning and validation purposes.
 
 ```cpp
  result = CreateSession();
@@ -335,8 +341,7 @@ Here we set up the configuration views, get the system's properties and we also 
 
  return true;
 ```
-Lastly, we'll create the session, set up the swapchains and finally return true if nothing went wrong during the entire setup.
-
+Lastly, we'll create the session which binds our graphics context to the OpenXR runtime and allocates the reference space, set up the swapchains which allocate the GPU textures that will receive our rendered output, and finally return true if nothing went wrong during the entire setup.  
 Now that we have set all of that up, it is time to fill those functions!
 
 #### CreateInstance()
@@ -360,7 +365,7 @@ bool VrManager::CreateInstance()
     return true;
 }
 ```
-In this function, we create the instance for OpenXR, this is also where extra extensions can be enabled for specific rendering libraries such as OpenGL (like we are using in this example), OpenGL_ES or Vulkan, but also more platform specific ones that can enable hand-tracking, body tracking, face tracking and more, if your device can use those functions of course.
+In this function, we create the instance for OpenXR, which initializes the OpenXR loader and establishes communication with the runtime. This is also where extra extensions can be enabled for specific rendering libraries such as OpenGL (like we are using in this example), OpenGL_ES or Vulkan, but also more platform specific ones that can enable hand-tracking, body tracking, face tracking and more, if your device can use those functions of course. The XR_KHR_opengl_enable extension is mandatory for OpenGL integration as it provides the functions needed to bind OpenGL contexts to OpenXR sessions. The apiVersion field tells the runtime which version of the OpenXR API we're targeting (XR_CURRENT_API_VERSION resolves to the version defined by the SDK headers). Note that API layers for debugging and validation can also be enabled here via enabledApiLayerCount and enabledApiLayerNames, similar to Vulkan validation layers.  
 For more information about what extensions are available, [there is a list of them available on their site here.](https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#extension-appendices-list)
 
 #### GetSystem()
@@ -379,7 +384,7 @@ bool VrManager::GetSystem()
     return true;
 }
 ```
-Here we simply ask for the headset's information and ID we'll need to use later.
+Here we query the runtime for a system that matches our specified form factor. The XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY indicates we're looking for a traditional VR headset; other form factors include HANDHELD_DISPLAY for AR phones or MAX_ENUM to accept any available device. This call doesn't initialize or claim the hardware—it simply queries whether a compatible device exists and populates m_systemId with a handle to that system, which we'll use in subsequent calls like session creation. Multiple applications can query the same system simultaneously, but only one can have an active session at a time.
 
 #### GetViewConfigurationViews()
 This one is a little larger so let's go through this step by step
@@ -397,7 +402,7 @@ void VrManager::GetViewConfigurationViews()
                                   &viewConfigurationCount,
                                   m_viewConfigTypes.data());
 ```
-First we enumerate the configurations to see how many there need to be, that is why we give a nullptr the first time around. We then resize the vector we want to fill with the amount of view configurations there will be before enumerating again and now filling the vector with all these configurations. This "enumerate twice, once for size, once for contents" will be a recurring subject throughout the setup process.
+First we enumerate the configurations to see how many there need to be, that is why we give a nullptr the first time around. We then resize the vector we want to fill with the amount of view configurations there will be before enumerating again and now filling the vector with all these configurations. This "enumerate twice, once for size, once for contents" pattern is used throughout OpenXR (and similar APIs) to handle dynamically-sized arrays without requiring heap allocation by the API itself. The runtime determines the array size, the application allocates the necessary memory, then the runtime populates it.
 
 ```cpp
  // Pick the first application supported View Configuration Type con supported by the hardware.
@@ -416,7 +421,7 @@ First we enumerate the configurations to see how many there need to be, that is 
      m_viewConfig = XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO;
  }
 ```
-Here we go through the view configurations and, like the comment states, find the first one that is supported and set the default view configuration (m_viewConfig) to that one. We then will check if m_viewConfig is still the default value we set it to (XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM), in which case something likely went wrong with getting the configs, however, we can still set it to primary_stereo as the default since that is the view configuration that is most often and assuming everything else works, this should work regardless. It is a good thing to debug since this might cause issues later, but it isn't something that will make the entire thing not work, thus, a simple std::cerr rather than a return.
+Here we select which view configuration to use from those reported by the runtime. The intent is to find the first configuration that both the application supports (defined earlier in m_viewConfigTypes member variable with STEREO and MONO) and the hardware provides. Note: the current logic will always find a match since it's searching within the same array it's iterating. You may want to check against a separate list of application-preferred configurations instead. We then will check if m_viewConfig is still the default value we set it to (XR_VIEW_CONFIGURATION_TYPE_MAX_ENUM), in which case something likely went wrong with getting the configs, however, we can still set it to primary_stereo as the default since that is the view configuration that is most often used and virtually all VR headsets support it. PRIMARY_STEREO means we'll render two views (one per eye) with separate poses and projection matrices. It is a good thing to debug since this might cause issues later, but it isn't something that will make the entire thing not work, thus, a simple std::cerr rather than a return.
 
 ```cpp
  // Gets the View Configuration Views. The first call gets the count of the array that will be returned. The next call fills
@@ -431,6 +436,8 @@ Here we go through the view configurations and, like the comment states, find th
                                    &viewConfigurationViewCount,
                                    m_viewConfigViews.data());
 ```
+Now we query the specific view configuration properties for our selected configuration. This retrieves the detailed parameters for each view in the configuration—for PRIMARY_STEREO, this will be 2 views (left and right eye). Each XrViewConfigurationView contains the runtime's recommended and maximum render target dimensions, as well as sample counts. The {XR_TYPE_VIEW_CONFIGURATION_VIEW} initializer ensures each element in the vector has its type field properly set before the enumerate call populates the rest of the structure. These dimensions will be used when creating the swapchains to ensure we allocate textures of appropriate size for optimal rendering quality.
+
 
 #### CreateSession()
 So everything thus far has been set up correctly and we are ready to create the session!
@@ -463,8 +470,9 @@ Another big function upcoming (that could potentially be split up into smaller f
     sessionCreateInfo.systemId = m_systemId;
     sessionCreateInfo.next = &graphicsBinding;
 ```
-First we have some functions set up to make sure OpenGL exists, this part is specific to this project since it uses OpenGL and thus will be different for other rendering libraries. the last part also is specific to my device as you can tell, it is for OpenGL and Windows, thus, this might also be different, keep that in mind!
-The last part also sets up the graphics binding, basically telling the session what is next in the structure chain, this is something that "in most cases one graphics API extension specific struct needs to be in this next chain." [as stated here.](https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XrSessionCreateInfo)
+First we have some functions set up to make sure OpenGL exists, this part is specific to this project since it uses OpenGL and thus will be different for other rendering libraries. The OpenGL context must be current and valid before creating the session because OpenXR needs to verify graphics API compatibility and will use this context to create shared resources like swapchain textures. The runtime needs access to the context handle to coordinate rendering operations. The last part also is specific to my device as you can tell, it is for OpenGL and Windows, thus, this might also be different, keep that in mind! Other platforms would use different binding structures: XrGraphicsBindingOpenGLXlibKHR for Linux/X11, XrGraphicsBindingOpenGLXcbKHR for Linux/XCB, etc.
+
+The last part also sets up the graphics binding, basically telling the session what is next in the structure chain, this is something that "in most cases one graphics API extension specific struct needs to be in this next chain." as stated here. The next pointer implements OpenXR's structure chaining mechanism, which allows extensions to add additional data to base structures without breaking API/ABI compatibility. The runtime traverses this linked list of structures to find the graphics binding it needs. Multiple structures can be chained if needed, though typically only the graphics binding is required.
 
 ```cpp
  XrResult result = xrCreateSession(m_instance, &sessionCreateInfo, &m_session);
@@ -487,7 +495,7 @@ The last part also sets up the graphics binding, basically telling the session w
      return false;
  }
 ```
-Then we actually create the sources, quite straight-forward. We attempt to create a session, and if it goes wrong, we get slightly detailed information about what exactly went wrong, whether it is the graphics, runtime or a different error.
+Then we actually create the session, quite straight-forward. The session represents the active connection between our application and the VR runtime, binding our graphics context to the XR system. This allocates runtime-side resources and prepares the compositor for receiving our rendered frames. We attempt to create a session, and if it goes wrong, we get slightly detailed information about what exactly went wrong, whether it is the graphics, runtime or a different error.
 
 ```cpp
  // Create reference space
@@ -503,8 +511,9 @@ Then we actually create the sources, quite straight-forward. We attempt to creat
      return false;
  }
 ```
-Next we will create the reference space, this will give the user the data that they need in order to position the player properly. In this case, we will be using a local reference space, since this still does most of the tracking properly for us, but can also auto-adjust slightly, which is more helpful for a seated experience and also if the user temporarily loses tracking or light or something, the program can still attempt to adjust itself.
-There are also View and Stage spaces, both of which have their own uses, [which are worth checking out here.](https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XrSpace)
+Next we will create the reference space, this will give the user the data that they need in order to position the player properly. The reference space defines the coordinate system origin and axes for all pose data we'll receive from OpenXR. Poses for the headset, controllers, and other tracked objects will be expressed relative to this space. In this case, we will be using a local reference space, since this still does most of the tracking properly for us, but can also auto-adjust slightly, which is more helpful for a seated experience and also if the user temporarily loses tracking due to lighting issues or sensor occlusion. LOCAL space maintains a stable origin relative to the initial head position at session start, and the runtime can recenter this origin if tracking is lost and reacquired. The poseInReferenceSpace defines an offset transform from the space's natural origin—here we use identity (no offset) with the quaternion (0,0,0,1) representing no rotation.
+
+There are also View and Stage spaces, both of which have their own uses, which are worth checking out [here](https://registry.khronos.org/OpenXR/specs/1.1/man/html/XrSpace.html). VIEW space is head-locked (moves with the headset), while STAGE space provides a room-scale origin with a defined floor level, calibrated during the runtime's room setup process.
 
 ```cpp
  // Explicitly begin the session
@@ -520,7 +529,7 @@ There are also View and Stage spaces, both of which have their own uses, [which 
 
  return true;
 ```
-Lastly, we will begin the actual session, this will allow us to start actually doing our rendering and other VR things (if you'd implement those, we only do rendering for this post).
+Lastly, we will begin the actual session, this will allow us to start actually doing our rendering and other VR things (if you'd implement those, we only do rendering for this post). Session creation and beginning are separate steps because OpenXR uses a state machine model. xrCreateSession allocates resources but doesn't start the session lifecycle. xrBeginSession transitions the session to the RUNNING state, signaling to the runtime that we're ready to submit frames. The primaryViewConfigurationType must match what we selected earlier during view configuration setup, confirming to the runtime which rendering mode we'll use.
 
 #### CreateSwapChains()
 ```cpp
@@ -553,7 +562,7 @@ if (result != XR_SUCCESS)
     m_swapchainDimensions.resize(m_viewCount);
     m_swapchainImages.resize(m_viewCount);
 ```
-Here we gather data for the view configuration views, this might seem a bit odd since we did something similar before, however, these ones are the views, rather than the configurations and types which is what we did before in the GetViewConfigurationViews(). Once again, we get the amount of viewConfigViews and then fill that vector with the data we gathered, if anything goes wrong, we will log this.
+Here we gather data for the view configuration views, this might seem a bit odd since we did something similar before, however, these ones are the views, rather than the configurations and types which is what we did before in the GetViewConfigurationViews(). The key difference: previously we enumerated which view configuration types are available (STEREO, MONO, etc.), but here we're querying the actual view parameters for a specific configuration type. Each XrViewConfigurationView contains the recommended and maximum resolution, as well as the recommended swapchain sample count for one view within that configuration. For PRIMARY_STEREO, this returns 2 view configuration views (one per eye), each with potentially different recommended dimensions if the HMD has asymmetric displays. Once again, we get the amount of viewConfigViews and then fill that vector with the data we gathered, if anything goes wrong, we will log this.
 
 ```cpp
 // Create swapchains for each view
@@ -606,8 +615,8 @@ for (uint32_t i = 0; i < m_viewCount; ++i)
     }
 }
 ```
-This for-loop sets up the swap chains for us, it gets the information it requires, such as the width and height of the screens, the images that need to be prepared and fills the swapchainImages with the data for that eye.
-Do keep in mind that depending on what device you are using, you may have more or less images per eye. For the Rift S for instance, I get 3 per eye, meaning that the swapchainImages vector contains 2 vectors, 1 per eye, each with 3 images each.
+This for-loop sets up the swap chains for us, it gets the information it requires, such as the width and height of the screens, the images that need to be prepared and fills the swapchainImages with the data for that eye. The usageFlags specify how we intend to use these textures: COLOR_ATTACHMENT_BIT indicates we'll render to them as framebuffer color attachments, while SAMPLED_BIT allows them to be sampled as textures (useful for post-processing). The format field uses OpenGL's internal format enum (GL_RGBA8 = 8 bits per channel, 32-bit RGBA). The sampleCount of 1 means no multisampling; increase this for MSAA. The faceCount is for cubemap faces (6 for cubemaps, 1 for standard 2D textures), arraySize is for texture arrays (we use 1 for simple 2D textures), and mipCount specifies mipmap levels (1 = no mipmaps). The runtime allocates the actual OpenGL textures based on these parameters, and we retrieve handles to them via xrEnumerateSwapchainImages. The reinterpret_cast<XrSwapchainImageBaseHeader*> is required because OpenXR uses a polymorphic image structure system—all graphics API-specific image types inherit from XrSwapchainImageBaseHeader, and the API expects this base type.
+Do keep in mind that depending on what device you are using, you may have more or less images per eye. For the Rift S for instance, I get 3 per eye, meaning that the swapchainImages vector contains 2 vectors, 1 per eye, each with 3 images each. The number of images per swapchain is determined by the runtime based on its internal pipelining requirements—typically 2-3 images to allow triple-buffering between application rendering, compositor processing, and display scanout.
 
 ```cpp
  // Ensure that the OpenGL context and swapchain images are compatible
@@ -626,7 +635,7 @@ Do keep in mind that depending on what device you are using, you may have more o
 
  return true;
 ```
-This last part is to make sure that the images are compatible with OpenGL's textures. This is not required and it should all work just fine without this, but this is more like a failsafe just in case something went wrong with OpenGL's setup for OpenXR.
+This last part is to make sure that the images are compatible with OpenGL's textures. The image.image field contains the OpenGL texture name (GLuint handle) allocated by the OpenXR runtime. We use glIsTexture() to verify the runtime actually created valid OpenGL texture objects that our context can access. This validation confirms the graphics binding is working correctly and the runtime successfully created shared resources between OpenXR and OpenGL. This is not required and it should all work just fine without this, but this is more like a failsafe just in case something went wrong with OpenGL's setup for OpenXR.
 
 
 So, that was it, the entire Initialize() function should now no longer give you any errors for functions that aren't found!
@@ -675,9 +684,15 @@ void VrManager::PollEvents()
 }
 ```
 Since the render function will be the biggest function, let's first take care of the PollEvents function.
-In here, we basically request OpenXR for any potential event, things that have changed since we last checked. We only need to handle 1 type of event, which is if the session's state has changed, but this function could also be used for input, if there are events that are lost or some other events, for more events, [you can check this page here.](https://registry.khronos.org/OpenXR/specs/1.1/man/html/xrPollEvent.html)
-What we do once a session state has changed, is that we check what the current state of the session is, if it is ready, we begin a session, like we did earlier. If it is stopping, we end the session.
 
+
+This function should be called every frame, typically at the start of your frame loop. The xrPollEvent function is non-blocking and returns immediately if no events are queued, making it safe to call repeatedly. The while loop continues polling until all pending events have been processed. In here, we basically request OpenXR for any potential event, things that have changed since we last checked. XrEventDataBuffer is a generic buffer large enough to hold any OpenXR event type. The runtime fills it with the actual event data, and we use the type field to determine what specific event structure to cast it to. This is OpenXR's polymorphic event system—similar to how swapchain images work.
+
+We only need to handle 1 type of event, which is if the session's state has changed, but this function could also be used for input, if there are events that are lost or some other events, for more events, [you can check this page here.](https://registry.khronos.org/OpenXR/specs/1.1/man/html/xrPollEvent.html)
+
+What we do once a session state has changed, is that we check what the current state of the session is, if it is ready, we begin a session, like we did earlier. The session follows a state machine: IDLE → READY → SYNCHRONIZED → VISIBLE → FOCUSED → (and back). The runtime drives these transitions based on HMD state (user puts on headset, application gets focus, etc.). We handle READY here because the runtime may transition the session to READY after we initially created it, or after returning from a previous STOPPING state. The SYNCHRONIZED state means frame timing is available, VISIBLE means we can submit frames to the compositor, and FOCUSED means we should render and our app has input focus. We must respond to READY by calling xrBeginSession, and to STOPPING by calling xrEndSession—these are mandatory state transitions the application must handle.
+
+If it is stopping, we end the session. The STOPPING state indicates the runtime wants to shut down the session gracefully—either because the user removed the headset, switched applications, or the system is shutting down. We must call xrEndSession in response to transition to IDLE. Not handling these transitions properly can cause the runtime to hang or force-terminate the application.
 
 Next up, the fun stuff:
 #### Render()
@@ -708,8 +723,9 @@ Here's where the magic truly starts (well not really, we are programmers, not ma
      return;
  }
 ```
-First we will poll events, just to make sure nothing changed or went wrong and then we do some more checks. We make sure that the session state is ready, synchronized, visible and focussed, basically, the session state has to be ready for us to use OpenXR's systems.
-Then we wait for the frame to be ready and then begin the frame.
+First we will poll events, just to make sure nothing changed or went wrong and then we do some more checks. We make sure that the session state is ready, synchronized, visible and focussed, basically, the session state has to be ready for us to use OpenXR's systems. More specifically: SYNCHRONIZED means we can call xrWaitFrame, VISIBLE means the compositor will display our frames (though the user might not be actively looking at them), and FOCUSED means we have input focus and should render at full quality. READY is included here though technically we shouldn't be rendering yet—in a production application you'd want to handle each state more precisely.
+
+Then we wait for the frame to be ready and then begin the frame. xrWaitFrame is the critical frame synchronization point—it blocks until the runtime is ready for the next frame and returns frameState.predictedDisplayTime, which is the estimated time when the frame will actually be displayed to the user. This predicted display time is crucial for accurate pose prediction. The runtime uses this call to regulate frame pacing and prevent the application from getting ahead of the compositor. xrBeginFrame signals to the runtime that we're starting our rendering work for this frame. These two calls, along with xrEndFrame, form OpenXR's frame loop synchronization contract—they must be called in strict order and paired correctly, or the session will error out.
 
 ```cpp
 // Prepare to render each view
@@ -741,8 +757,15 @@ if (!m_views.empty())
         waitInfo.timeout = XR_INFINITE_DURATION;
         xrWaitSwapchainImage(swapchain, &waitInfo);
 ```
-Here we first create some vectors that will be filled with temporary data, our projectionViews and layers.
-after that, we, as the comment suggests, locate the views and space, we basically ask OpenXR the position as well as rotation of the views. We can use this later to render both eyes separately, as they will each have a slight offset, mimicking the natural separation between human eyes to create the illusion of depth. We also wait for the swapchainImage to be acquired. The waitInfo.timeout "indicates how many nanoseconds the call **may** block waiting for the image to become available for writing", and thus, if restrictions on how long this is allowed to be waiting for need to be in place, you can set the duration to a specific amount.
+Here we first create some vectors that will be filled with temporary data, our projectionViews and layers. The projectionViews vector will contain the rendering parameters for each eye, while layers will hold pointers to composition layer structures that tell the compositor how to combine our rendered views with other layers (though we only use a single projection layer here).
+
+After that, we, as the comment suggests, locate the views and space, we basically ask OpenXR the position as well as rotation of the views. xrLocateViews performs pose prediction: using the predictedDisplayTime we received from xrWaitFrame, the runtime calculates where the user's eyes will be at the moment this frame is displayed, accounting for head motion during rendering and compositor latency. This prediction minimizes perceived lag and motion-to-photon latency. The function populates each XrView structure in m_views with the predicted pose (position and orientation) and fov (field of view angles: left, right, up, down) for that view. The viewState return value contains flags indicating the validity and tracking state of the poses.
+
+We can use this later to render both eyes separately, as they will each have a slight offset, mimicking the natural separation between human eyes to create the illusion of depth. This offset is the interpupillary distance (IPD), and the runtime automatically provides correctly positioned view poses based on the user's calibrated IPD settings.
+
+We also wait for the swapchainImage to be acquired. xrAcquireSwapchainImage requests the next available image from the swapchain's circular buffer and returns its index. This is a non-blocking call that simply tells us which image to use. xrWaitSwapchainImage is the synchronization primitive that blocks until the compositor has finished reading from that image (from the previous frame where it was used). This prevents us from overwriting an image that's still being displayed or composited. Together, these calls implement the producer-consumer synchronization between our rendering thread and the compositor.
+
+The waitInfo.timeout "indicates how many nanoseconds the call may block waiting for the image to become available for writing", and thus, if restrictions on how long this is allowed to be waiting for need to be in place, you can set the duration to a specific amount. Using XR_INFINITE_DURATION means we're willing to wait indefinitely, which is typical for VR applications where maintaining frame timing is critical. A timeout would only occur if the compositor has hung or there's a serious system error.
 
 ```cpp
 // Set up projection view
@@ -772,13 +795,16 @@ for (const auto& [e, camera, cameraTransform] :
 }
 ```
 This code was from a classmate of mine, but I will explain it to the best of my abilities regardless.
-First we set up the projection view for each eye, what this does is basically slightly offset the eye to be in the place it should. Rather than having one "view" like PC games, we have 2 views here that are slightly offset to, like I stated before, mimic how real eyes work as well. After receiving all that data, we have to convert it to something that OpenGL can use, thus the conversion to glm data types.
-After that there is a for-loop that goes through each camera. I use Entt here, which is a library for managing entities and it might seem a little complicated for those unexperienced with it, but all it does is get my camera and its transform, nothing more. So if you are going to follow this tutorial by copy-pasting (which I can't really blame you for to be honest), make sure to remove the for-loop and replace it with a private variable for the projection that you save in the header and then modify here since the Camera class only has a glm::mat4 Projection, and that is it, although you will have to use this projection in your renderer, so keep that in mind. We set the camera's position (translation) and rotation and create the projection for it as well.
+
+
+Rather than having one "view" like PC games, we have 2 views here that are slightly offset to, like I stated before, mimic how real eyes work as well. After receiving all that data, we have to convert it to something that OpenGL can use, thus the conversion to glm data types. OpenXR uses its own vector (XrVector3f) and quaternion (XrQuaternionf) types for pose data. These need to be converted to your rendering library's math types—in this case GLM. Note that quaternion component ordering can differ between libraries (wxyz vs xyzw), so the conversion function must handle this correctly.
+
+After that there is a for-loop that goes through each camera. I use Entt here, which is a library for managing entities and it might seem a little complicated for those unexperienced with it, but all it does is get my camera and its transform, nothing more. So if you are going to follow this tutorial by copy-pasting (which I can't really blame you for to be honest), make sure to remove the for-loop and replace it with a private variable for the projection that you save in the header and then modify here since the Camera class only has a glm::mat4 Projection, and that is it, although you will have to use this projection in your renderer, so keep that in mind. We set the camera's position (translation) and rotation and create the projection for it as well. XrMatrix4x4f_CreateProjectionFov is a helper function that constructs an asymmetric perspective projection matrix from OpenXR's FOV structure (which specifies angles for left, right, up, down separately, rather than a single FOV value). The near plane (0.01f) and far plane (100.0f) define the depth range. The resulting projection matrix accounts for the HMD's specific lens distortion characteristics and ensures correct stereoscopic rendering.
 
 ```cpp
 m_renderer->Render();
 ```
-Here I call my render function from my renderer. The data has all been set up properly and my renderer uses the projection from my camera.
+Here I call my render function from my renderer. The data has all been set up properly and my renderer uses the projection from my camera. At this point, the camera transform and projection have been configured for this specific eye view, so your rendering pipeline will produce the correct perspective for that eye.
 
 ```cpp
  // Copy the rendered image to the swapchain framebuffer
@@ -818,7 +844,9 @@ XrSwapchainImageReleaseInfo releaseInfo = {XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO}
 xrReleaseSwapchainImage(swapchain, &releaseInfo);
 }
 ```
-Here we get the framebuffer from our renderer that has been prepared with the image for this eye and blit that to our swapchain's framebuffer that is generated here. What blitting is, is just copying pixels from one source to another, so in this case, from our sourceFrameBuffer to our swapchainFrameBuffer and release that data to the swapchain.
+Here we get the framebuffer from our renderer that has been prepared with the image for this eye and blit that to our swapchain's framebuffer that is generated here. We create a temporary framebuffer object and attach the OpenXR swapchain texture to it, making it the destination for our blit operation. This is necessary because the swapchain texture is owned by the OpenXR runtime, not directly by our rendering system. We can't render to it normally without wrapping it in a framebuffer object first. What blitting is, is just copying pixels from one source to another, so in this case, from our sourceFrameBuffer to our swapchainFrameBuffer using glBlitFramebuffer, which can also perform scaling if the source and destination dimensions differ (though ideally they should match to avoid quality loss). The GL_NEAREST filter is used since we typically don't want any interpolation for the final output. The temporary framebuffer is immediately deleted after the blit to avoid resource leaks.
+
+xrReleaseSwapchainImage signals to the runtime that we've finished rendering to this swapchain image and it's ready for the compositor to use. This completes the swapchain image lifecycle for this frame: acquire → wait → render → release. The runtime can now composite this image and display it, while we move on to rendering the next view (other eye) or the next frame. and release that data to the swapchain.
 
 ```cpp
     // End the frame
@@ -830,8 +858,7 @@ Here we get the framebuffer from our renderer that has been prepared with the im
     xrEndFrame(m_session, &endInfo);
 }
 ```
-After the eyes have been rendered and the swapchain images are prepared, we end the XrFrame with the data it needs.
-
+After the eyes have been rendered and the swapchain images are prepared, we end the XrFrame with the data it needs. xrEndFrame submits our composition layers to the runtime and completes the frame loop. The displayTime must match what we received from xrWaitFrame. The environmentBlendMode specifies how our rendered content blends with the real world: OPAQUE means full VR (no passthrough), ADDITIVE would blend our content additively with the real world (AR), and ALPHA_BLEND would use alpha blending. The layers array contains pointers to all composition layers we want to submit—projection layers (like ours), quad layers (for UI), cube layers (for skyboxes), etc. The compositor combines these layers in order to produce the final image displayed to the user. After this call, the frame is complete and we can start the next frame with another xrWaitFrame call.
 
 #### Conclusion
 And that's it!
