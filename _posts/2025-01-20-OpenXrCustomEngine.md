@@ -21,7 +21,7 @@ During the process of implementing OpenXR I have learned a lot about not only Op
 It is worth keeping in mind that I used my Rift S to test any code that I wrote. While OpenXR does support most, if not all major headsets, some things might work differently based on the headset you use.
 
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Please keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not, though, you could always check these files to see the full versions of what I will explain here in this post.
-[VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/OpenXrCustomEngine/vrmanager.rar)
+[VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/Posts/OpenXrCustomEngine/vrmanager.rar)
 
 I also would like to state that I have used AI for bits of this piece. I wrote the original blog early 2025 (it is late 2025 by the time I am updating this again) and it wasn't in-depth enough to properly explain what everything does, hence, I used AI to help me understand it better as well. It is often easy to just use what you find in the documentation, but this doesn't mean you understand what it does. I did check whether the information given was correct of course, but I still felt like this was important to mention.
 

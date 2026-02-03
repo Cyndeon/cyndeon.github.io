@@ -8,35 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "e0fa68b787249225",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "_posts/2025-01-20-OpenXrCustomEngine.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "2025-01-20-OpenXrCustomEngine"
-            }
-          },
-          {
             "id": "b7887de8efcf0bf3",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_tabs/portfolio.md",
+                "file": "_posts/2025-10-24-UE5AchievementPlugin.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "portfolio"
+              "title": "2025-10-24-UE5AchievementPlugin"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -181,33 +166,35 @@
   },
   "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
-    "_tabs/categories.md",
+    "_site/assets/Posts/AchievementPlugin/steamchiev.png",
+    "assets/Posts/AchievementPlugin/steamchiev.png",
     "_tabs/about.md",
-    "assets/AboutMe/DieselAndME.jpeg",
-    "_tabs/portfolio.md",
-    "_site/assets/Thumbnails/Wanderland.png",
-    "assets/Thumbnails/Wanderland.png",
-    "assets/Thumbnails/Wanderland.png.opdownload",
-    "_site/assets/css/custom_buttons_colors.css",
-    "assets/css/custom_buttons_colors.css",
+    "_posts/2025-10-24-UE5AchievementPlugin.md",
+    "assets/css/jekyll-theme-chirpy.scss",
+    "_site/assets/css/jekyll-theme-chirpy.scss",
     "_site/assets/css/New Text Document.txt",
     "assets/css/New Text Document.txt",
-    "_site/assets/css/cards_colors_about.css",
-    "assets/css/cards_colors_about.css",
-    "assets/css/cards_colors_about.css.opdownload",
-    "_site/assets/css/cards.css",
-    "assets/css/cards.css",
+    "_site/assets/Posts/AchievementPlugin/popupprogress.png",
+    "_site/assets/Posts/AchievementPlugin/popupgraph.png",
+    "_site/assets/Posts/AchievementPlugin/epicchiev.png",
+    "_site/assets/Posts/AchievementPlugin/nodes.png",
+    "_site/assets/Posts/AchievementPlugin/defaultpopup.png",
+    "_site/assets/Posts/AchievementPlugin/chievpopups.png",
+    "_site/assets/Posts/AchievementPlugin/achievementsSettings.png",
+    "_site/assets/Posts/AchievementPlugin",
+    "assets/Posts/AchievementPlugin/popupprogress.png",
+    "assets/Posts/AchievementPlugin/popupgraph.png",
+    "assets/Posts/AchievementPlugin",
+    "assets/Posts/New folder",
+    "_site/tags/plugin/index.html",
+    "_site/tags/plugin",
+    "_site/tags/pl/index.html",
     "_posts/2025-01-20-OpenXrCustomEngine.md",
+    "_tabs/portfolio.md",
+    "_tabs/categories.md",
     "_tabs/archives.md",
     "_tabs/tags.md",
     "_site/tabs/about.md",
-    "_site/assets/AboutMe/DieselAndME.jpeg",
-    "_site/assets/Thumbnails/Ortus.png",
-    "assets/Thumbnails/Ortus.png",
-    "_site/assets/Thumbnails/Beautiful.png",
-    "assets/Thumbnails/Beautiful.png",
-    "_site/assets/Thumbnails/UnityVrDemo.png",
-    "assets/Thumbnails/UnityVrDemo.png",
     "README.md"
   ]
 }
