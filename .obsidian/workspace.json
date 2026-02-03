@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_tabs/about.md",
+                "file": "_tabs/portfolio.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "about"
+              "title": "portfolio"
             }
           }
         ]
@@ -166,10 +166,17 @@
   },
   "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
-    "_tabs/archives.md",
     "_tabs/about.md",
-    "assets/AboutMe/DieselAndME.jpeg",
+    "_tabs/archives.md",
+    "_tabs/categories.md",
+    "_tabs/tags.md",
+    "_tabs/portfolio.md",
+    "assets/css/cards.css.opdownload",
+    "_site/assets/css/cards.css",
+    "assets/css/cards.css",
+    "_posts/2025-01-20-OpenXrCustomEngine.md",
     "_posts/2025-10-24-UE5AchievementPlugin.md",
+    "assets/AboutMe/DieselAndME.jpeg",
     "_site/assets/Posts/AchievementPlugin/steamchiev.png",
     "assets/Posts/AchievementPlugin/steamchiev.png",
     "assets/css/jekyll-theme-chirpy.scss",
@@ -186,13 +193,6 @@
     "_site/assets/Posts/AchievementPlugin",
     "assets/Posts/AchievementPlugin",
     "assets/Posts/New folder",
-    "_site/tags/plugin/index.html",
-    "_site/tags/plugin",
-    "_site/tags/pl/index.html",
-    "_posts/2025-01-20-OpenXrCustomEngine.md",
-    "_tabs/portfolio.md",
-    "_tabs/categories.md",
-    "_tabs/tags.md",
     "_site/tabs/about.md",
     "README.md"
   ]
