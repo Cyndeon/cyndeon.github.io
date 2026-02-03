@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2025-10-24-UE5AchievementPlugin.md",
+                "file": "_tabs/about.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "2025-10-24-UE5AchievementPlugin"
+              "title": "about"
             }
           }
         ]
@@ -166,10 +166,12 @@
   },
   "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
+    "_tabs/archives.md",
+    "_tabs/about.md",
+    "assets/AboutMe/DieselAndME.jpeg",
+    "_posts/2025-10-24-UE5AchievementPlugin.md",
     "_site/assets/Posts/AchievementPlugin/steamchiev.png",
     "assets/Posts/AchievementPlugin/steamchiev.png",
-    "_tabs/about.md",
-    "_posts/2025-10-24-UE5AchievementPlugin.md",
     "assets/css/jekyll-theme-chirpy.scss",
     "_site/assets/css/jekyll-theme-chirpy.scss",
     "_site/assets/css/New Text Document.txt",
@@ -182,8 +184,6 @@
     "_site/assets/Posts/AchievementPlugin/chievpopups.png",
     "_site/assets/Posts/AchievementPlugin/achievementsSettings.png",
     "_site/assets/Posts/AchievementPlugin",
-    "assets/Posts/AchievementPlugin/popupprogress.png",
-    "assets/Posts/AchievementPlugin/popupgraph.png",
     "assets/Posts/AchievementPlugin",
     "assets/Posts/New folder",
     "_site/tags/plugin/index.html",
@@ -192,7 +192,6 @@
     "_posts/2025-01-20-OpenXrCustomEngine.md",
     "_tabs/portfolio.md",
     "_tabs/categories.md",
-    "_tabs/archives.md",
     "_tabs/tags.md",
     "_site/tabs/about.md",
     "README.md"
