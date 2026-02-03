@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_tabs/portfolio.md",
+                "file": "_posts/2026-02-03-UE5AchievementPlugin.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "portfolio"
+              "title": "2026-02-03-UE5AchievementPlugin"
             }
           }
         ]
@@ -166,23 +166,29 @@
   },
   "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
+    "_posts/2025-01-20-OpenXrCustomEngine.md",
+    "_posts/2026-02-03-UE5AchievementPlugin.md",
+    "_tabs/portfolio.md",
+    "_site/posts/UE5AchievementPlugin/index.html",
+    "_site/posts/UE5AchievementPlugin",
+    "_site/categories/unreal/index.html",
+    "_site/categories/unreal",
+    "_site/tags/achievements/index.html",
+    "_site/tags/achievements",
+    "_site/tags/plugin/index.html",
+    "_site/tags/plugin",
     "_tabs/about.md",
     "_tabs/archives.md",
     "_tabs/categories.md",
+    "_tabs/posts.md",
+    "_site/portfolio/index.html",
+    "_site/portfolio",
     "_tabs/tags.md",
-    "_tabs/portfolio.md",
-    "assets/css/cards.css.opdownload",
-    "_site/assets/css/cards.css",
-    "assets/css/cards.css",
-    "_posts/2025-01-20-OpenXrCustomEngine.md",
-    "_posts/2025-10-24-UE5AchievementPlugin.md",
+    "_site/tabs/posts.md",
+    "_site/tabs/Untitled.md",
     "assets/AboutMe/DieselAndME.jpeg",
     "_site/assets/Posts/AchievementPlugin/steamchiev.png",
     "assets/Posts/AchievementPlugin/steamchiev.png",
-    "assets/css/jekyll-theme-chirpy.scss",
-    "_site/assets/css/jekyll-theme-chirpy.scss",
-    "_site/assets/css/New Text Document.txt",
-    "assets/css/New Text Document.txt",
     "_site/assets/Posts/AchievementPlugin/popupprogress.png",
     "_site/assets/Posts/AchievementPlugin/popupgraph.png",
     "_site/assets/Posts/AchievementPlugin/epicchiev.png",
@@ -190,9 +196,6 @@
     "_site/assets/Posts/AchievementPlugin/defaultpopup.png",
     "_site/assets/Posts/AchievementPlugin/chievpopups.png",
     "_site/assets/Posts/AchievementPlugin/achievementsSettings.png",
-    "_site/assets/Posts/AchievementPlugin",
-    "assets/Posts/AchievementPlugin",
-    "assets/Posts/New folder",
     "_site/tabs/about.md",
     "README.md"
   ]

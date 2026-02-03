@@ -13,3 +13,7 @@ pre, code {
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
 }
+
+#sidebar .nav-item:first-child {
+  display: none !important;
+}
