@@ -3,6 +3,22 @@ title: Portfolio
 icon: fas fa-solid fa-circle-user # Choose an icon from FontAwesome
 order: 1 # Adjust based on where you want it in the nav
 ---
+<!-- This disables Chirpy's default sidebar panel -->
+<style>
+#panel-wrapper {
+  display: none !important;
+}
+
+main .container .row {
+  justify-content: center !important;
+}
+
+main .container .row > .col-12 {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+</style>
+<!--====-->
 
 <link rel="stylesheet" href="/assets/css/cards.css">
 
