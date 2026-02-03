@@ -11,7 +11,7 @@ tags:
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 media_subpath: /assets/
-image: Colored.png
+image: Thumbnails/Colored.png
 ---
 ## Intro
 
@@ -27,7 +27,7 @@ I also would like to state that I have used AI for bits of this piece. I wrote t
 
 ### Showcase
 Here is a little demo of what it will look like in the end. I do have some models rendering here but it still shows nicely of what it will look like at the end. 
-|{% include embed/video.html src='/OpenXrCustomEngine/VR.mp4' %}|
+|{% include embed/video.html src='Posts/OpenXrCustomEngine/VR.mp4' %}|
 ## Requirements
 - Visual Studio (or another environment for programming)
 - VR headset compatible with OpenXR
