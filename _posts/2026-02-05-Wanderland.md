@@ -96,8 +96,7 @@ Lastly, we change the state of the light if needed. For instance, when we turn o
 
 All of that work and it ends up looking something like this when the boss attacks:
 <video width="320" height="240" controls>
-  <source src="/assets/Posts/Wanderland/flickermute.mp4" type="video/mp4">
-</video>  
+  <source src="/assets/Posts/Wanderland/Flickermute.mp4" type="video/mp4">
 For those who cannot see it, when the boss starts the attack animation, the lights start flickering and when the attack is over, they stop.
 
 So I didn't work on the boss this block, however, this seems to me like the code they call in order to make the lights flicker, it is a Function called "HighlightDangerZone".  
