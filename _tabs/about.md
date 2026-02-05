@@ -99,3 +99,6 @@ order: 5
 	<li> Fluent English</li>
 	<li> Fluent Dutch</li>
 </ul>
+
+<!--Make icon redirect to the Portfolio page, don't touch this!-->
+<script> document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) { link.href = '/portfolio/'; }); </script>

@@ -4,6 +4,7 @@ date: 2026-02-03T21:46:00
 categories:
   - Programming
   - Unreal
+  - Tools
 tags:
   - cpp
   - plugin
@@ -12,6 +13,7 @@ description: A blog describing code I used to create my Achievement Plugin for U
 toc: true
 image: assets/Thumbnails/UE5AchievementPlugin.png
 ---
+## Introduction
 The goal for this project was to **make an achievement plugin that supports local achievements, with support to sync progress to Steam and Epic, with custom UI popups and all of this should be able to be controlled via Blueprint, with no C++ required**.  
 
 Note: This next part will be all about me explaining why I made this and some research I did beforehand. If you'd prefer to skip to the actual code, [please go here](#achievement-data).   
@@ -29,7 +31,7 @@ Because I wanted this to be usable for all of the projects I worked on while at 
 
 As of writing this in Feb 2026, I am working on an update for the plugin that will allow the user to also have an achievement list, this post will be updated at some point after the update has been posted to FAB.
 ___
-### Achievement Data
+## Achievement Data
 Local achievements:  
 They are split up into multiple parts, the achievement itself, and the progress towards that achievement and the variables required for other platforms:
 
@@ -121,7 +123,7 @@ This allows me to create achievements, store their progress and update the achie
 
 ___
 
-### Achievement Settings
+## Achievement Settings
 Now that we have the data, we need a class to store that data. This class for me is rather large so I will only be showing the important bits.
 I have made a class that keeps track of all of the custom settings the user would need in order to fully customize their experience.
 There are the save slot settings which allow the user to pick a name for the file to save achievements in as well as the name for the file.
@@ -184,7 +186,7 @@ void FAchievementPluginModule::StartupModule()
 }
 ```
 ___
-### Setting Progress
+## Setting Progress
 Now that the user has all the tools to set up the achievements, it is important that they can now modify them next.  
 This is how the UI looks:  
 ![](assets/Posts/AchievementPlugin/achievementsSettings.png)
@@ -255,7 +257,7 @@ bool UAchievementManagerSubSystem::IncreaseAchievementProgress(const FString& ac
 }
 ```
 ___
-### Platforms
+## Platforms
 So now that the progress has been increased on the local platform, next up is one of the other platforms, it first will call the function from the specific platform:
 ```cpp
 bool UAchievementPlatformsClass::SetPlatformAchievementProgress(const FAchievementPlatformData& platformData, const float progress, const bool unlocked)
@@ -415,7 +417,7 @@ bool EpicGamesAchievementsClass::SetEpicAchievementProgress(const FAchievementPl
 ```
 ![](../assets/Posts/AchievementPlugin/epicchiev.png)
 ___
-### Popups
+## Popups
 So now that all the data has been updated, we still need to notify the user of the unlocked achievement or progress that has been made.  
 First, I wanted the popups to be able to be queued, just like Steam does. The user can choose to show up to x achievements at the same time (3 by default), while the rest just waits until a spot opens up. Popups should also move down every time the first one disappears, so that is what I made.  
 
@@ -562,7 +564,7 @@ In the end, using the default widget I provide, achievements will look like this
 ![](../assets/Posts/AchievementPlugin/chievpopups.png)  
 
 ___
-### SaveGame and Config
+## SaveGame and Config
 So the achievements, both the data and the progress, have to be saved. That, amongst the other options like whether to clean up the achievements on start, which widget to use and much more.  
 I use 2 different saving "systems" for this. The first is the Config, which I use for all of my developer settings like achievement data and the widget. I save them into the DefaultGame.ini. It's luckily super simple to do so, since the PROPERTY macro has a specifier that just saves the variable to the config:
 ```cpp
@@ -701,7 +703,7 @@ TMap<int32, FAchievementProgress> UAchievementSaveManager::LoadProgress() const
 }
 ```
 ___
-### Plugin Settings "Buttons"
+## Plugin Settings "Buttons"
 I also wanted my plugin settings to have buttons, at first it was just used for testing, but later I wanted this to allow users to download the achievements from the selected platform, requiring less manual setup from the user.  
 Regular buttons however, don't actually work in the settings UI. They show up, you can click them, but it doesn't call the function it should. So I had to get a little more creative.  
 I have Transient (doesn't save) booleans that I set, and when clicked, my PostEditChangeProperty overridden function will call what I want the "button" to call.  
@@ -792,7 +794,7 @@ Then, in the aforementioned PostEditChangeProperty I check if the name of the ed
 #pragma endregion
 ```
 ___
-### Downloading Achievements
+## Downloading Achievements
 As I just mentioned, the user can also download pre-existing achievements from any of the selectable platforms (except for Local of course).  
 When the second button gets pressed to force override the achievements with those of the selected platform, it will call this function below. It will first make sure the platform has been initialized, then attempt to retrieve the achievements and override the current TMap with those that have been downloaded.
 ```cpp
@@ -969,7 +971,10 @@ After that is done, we will get the amount of achievements and just like with th
 
 ___
 
-### Conclusion
+## Conclusion
 If you have gotten this far, whether you read all of it or just skimmed over it, thank you.  
 I have spent many hours on this project, making sure it works as intended so that anyone can use it.  
 If you have any feedback whatsoever, feel free to reach out to me at justingamedeveloperbusiness@gmail.com or check out the plugin's Github issues page :D
+
+<!--Make icon redirect to About Me, don't touch this!-->
+<script> document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) { link.href = '/about/'; }); </script>

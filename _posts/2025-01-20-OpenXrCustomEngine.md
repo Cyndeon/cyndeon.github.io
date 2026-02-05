@@ -8,12 +8,13 @@ tags:
   - cpp
   - openxr
   - opengl
+  - customengine
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 media_subpath: /assets/
 image: Thumbnails/Colored.png
 ---
-## Intro
+## Introduction
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
 During the process of implementing OpenXR I have learned a lot about not only OpenXR, but also OpenGL, which is the rendering library that Bee uses. Of course, none of this hasn't been without running into many obstacles. In this blog post I will explain how I implemented OpenXR and combined it with the pre-existing Bee library. I will go over what my original plans were, how I got the required scripts to run, how I made the rendering using the OpenXR swapchains combined with OpenGL and much more!
@@ -870,3 +871,6 @@ I hope this post was helpful and gave you the help you needed to set up OpenXR f
 - [Helpful example of a main script: https://github.com/KHeresy/openxr-simple-example/blob/master/main.cpp,](https://github.com/KHeresy/openxr-simple-example/blob/master/main.cpp)
 - [Official tutorial: https://openxr-tutorial.com//windows/opengl/1-introduction.html#introduction](https://openxr-tutorial.com//windows/opengl/1-introduction.html#introduction)
 - [Official site for extensions (and more): https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#introductiont](https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html?extension-appendices-list#introduction)
+
+<!--Make icon redirect to About Me, don't touch this!-->
+<script> document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) { link.href = '/about/'; }); </script>

@@ -6,10 +6,11 @@ order: 1 # Adjust based on where you want it in the nav
 
 <link rel="stylesheet" href="/assets/css/cards.css">
 
-<div class="projects-container">
+<div style="position: relative;"> <p style="position: absolute; top: -20px; left: 0; right: 0; text-align: center; color: #888; font-size: 0.8rem;"> Here are some of the projects I've worked on. For more information on my work in detail, check out the pages with the "Blog" tag! </p> </div>
 
+<div class="projects-container">
 <!-- Tag order, IMPORTANT TO FOLLOW! -->
-<!-- Engine, Language, Other tags (in order of you want the user to see), Gamejam, Solo/Team -->
+<!-- Blog, Engine, Language, Other tags (in order of you want the user to see), Solo/Team -->
 
 <!-- UE5 Achievement Plugin -->
 <div class="card-wrapper">
@@ -21,6 +22,7 @@ order: 1 # Adjust based on where you want it in the nav
         <h3>UE5 Achievement Plugin</h3>
         <p class="card-description">A custom achievement system plugin for Unreal Engine 5.</p>
         <div class="project-tags">
+          <span class="project-tag blogpost">Blog</span>
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
           <span class="project-tag solo">Solo</span>
@@ -37,15 +39,16 @@ order: 1 # Adjust based on where you want it in the nav
         <img src="/assets/Thumbnails/Wanderland.png" alt="">
       </div>
       <div class="card-content">
-        <h3>Wanderland [BLOG UPCOMING]</h3>
+        <h3>Wanderland</h3>
         <p class="card-description">A magical experience where you fight a boss with physical wands in real life</p>
         <div class="project-tags">
+          <span class="project-tag blogpost">Blog</span>
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
-      <a href="https://knippa.itch.io/xrwanderland" class="card-link" target="_blank"></a>
+      <a href="/posts/Wanderland/" class="card-link"></a>
     </div>
 </div>
 
@@ -80,7 +83,6 @@ order: 1 # Adjust based on where you want it in the nav
         <div class="project-tags">
           <span class="project-tag unity">Unity</span>
           <span class="project-tag csharp">C#</span>
-          <span class="project-tag gamejam">Gamejam</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
@@ -98,6 +100,7 @@ order: 1 # Adjust based on where you want it in the nav
         <h3>OpenXR</h3>
         <p class="card-description">A blog post explaining how I implemented OpenXR into a custom C++ engine made by BUAS</p>
         <div class="project-tags">
+          <span class="project-tag blogpost">Blog</span>
           <span class="project-tag cpp">C++</span>
           <span class="project-tag virtual-reality">VR</span>
           <span class="project-tag solo">Solo</span>
@@ -146,3 +149,6 @@ order: 1 # Adjust based on where you want it in the nav
 </div>
 
 </div>
+
+<!--Make icon redirect to About Me, don't touch this!-->
+<script> document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) { link.href = '/about/'; }); </script>
