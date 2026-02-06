@@ -5,7 +5,7 @@ order: 1 # Adjust based on where you want it in the nav
 ---
 <link rel="stylesheet" href="/assets/css/cards.css">
 
-<div style="position: relative;"> <p style="position: absolute; top: -28px; left: 0; right: 0; text-align: right; color: #888; font-size: 0.8rem;"> Here are some of the projects I've worked on. For more information on my work in detail, check out the pages with the "Blog" tag! </p> </div>
+<div style="position: relative;"> <p style="position: absolute; top: -28px; left: 0; right: 0; text-align: right; color: #888; font-size: 0.8rem;"> Here are some of the projects I've worked on. For more information on my work in detail, check out the pages with the 'Blog' tag! </p> </div>
 
 <!-- Filter Button -->
 <div class="filter-container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 20px;">
