@@ -171,7 +171,11 @@ order: 1 # Adjust based on where you want it in the nav
 </div>
 
 <!--Make icon redirect to About Me, don't touch this!-->
-<script> document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) { link.href = '/about/'; }); </script>
+<script>
+document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) {
+  link.href = '/about/';
+});
+</script>
 
 <!-- Button Script -->
 <script>
@@ -192,7 +196,7 @@ document.getElementById('toggle-filters').addEventListener('click', function() {
       card.classList.remove('hidden');
     });
     
-    // Reset active button to "All"
+    // Reset active button to All
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.classList.remove('active');
       if (btn.getAttribute('data-filter') === 'all') {
