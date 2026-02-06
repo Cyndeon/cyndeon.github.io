@@ -97,12 +97,12 @@ Lastly, we change the state of the light if needed. For instance, when we turn o
 All of that work and it ends up looking something like this when the boss attacks:
 <video width="320" height="240" controls>
   <source src="/assets/Posts/Wanderland/Flickermute.mp4" type="video/mp4">
-For those who cannot see it, when the boss starts the attack animation, the lights start flickering and when the attack is over, they stop.
+</video> 
 
-So I didn't work on the boss this block, however, this seems to me like the code they call in order to make the lights flicker, it is a Function called "HighlightDangerZone".  
+So I didn't work on the boss this project, however, this seems to me like the code they call in order to make the lights flicker, it is a Function called "HighlightDangerZone".  
 ![](/assets/Posts/Wanderland/bossHighlightFlicker.png)  
 This is how one would use the functionality I gave them access to. The target the DMX Controller, which, the name of the light is an enum to make it easier for DP to find, they have a custom color they set as well as a boolean for using a random color (which is never used for as far as I know). They also set the duration and keep the interval the exact same over the course of the attack, which is a shame as I did bring up numerous times that it could flicker faster as the attack came closer, however, design is not something I have that much control over if at all really.  
-It is however that simple to use the lights. I talked a lot with Robin (the PR who worked on the Bosses for the entire block alongside some other things) about what he wanted and about how we wanted to go about implementing this and as you can see, despite some unused functionality, is super simple to use with enough customizability.
+It is however that simple to use the lights. I talked a lot with Robin (the PR who worked on the Bosses for the entire project alongside some other things) about what he wanted and about how we wanted to go about implementing this and as you can see, despite some unused functionality, is super simple to use with enough customizability.
 
 ### Custom Wand Connection Plugin
 So my second main task was creating a custom Plugin for Unreal that would allow us to connect the wands to Unreal and allow us to controls its behavior (Vibration and LED colors) by using Blueprint nodes.  
@@ -276,7 +276,7 @@ Next up, still on the topic of multi-threading, std::mutex, the thing that preve
 FScopeLock lock(&m_clientsMutex);
 ```
 
-So that was how I changed the std:: multi-threading to UE multi-threading. Having never worked with multi-threading before this block, it was a little confusing trying to figure out how everything worked together and at the same time. Yes the code was pretty much given to me, all I had to do was change it to UE code, but in order to keep the functionality the same, I still had to understand the very basics of multi-threading alongside how FRunnable works, which definitely took me some time.
+So that was how I changed the std:: multi-threading to UE multi-threading. Having never worked with multi-threading before this project , it was a little confusing trying to figure out how everything worked together and at the same time. Yes the code was pretty much given to me, all I had to do was change it to UE code, but in order to keep the functionality the same, I still had to understand the very basics of multi-threading alongside how FRunnable works, which definitely took me some time.
 
 There was a lot more code Phil gave me that I had to convert, including another class, however, it did boil down to just doing this more. Replacing types, slightly changing some functions to work the same way but for Unreal, and I think that repeating myself here any more is not useful, so I will move on to the next topic.
 
