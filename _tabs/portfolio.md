@@ -172,66 +172,65 @@ order: 1 # Adjust based on where you want it in the nav
 
 <!--Make icon redirect to About Me, don't touch this!-->
 <script>
-document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) {
-  link.href = '/about/';
+document.querySelectorAll("#sidebar #avatar, #sidebar .site-title").forEach(function(link) {
+  link.href = "/about/";
 });
 </script>
 
 <!-- Button Script -->
 <script>
-document.getElementById('toggle-filters').addEventListener('click', function() {
-  const filters = document.querySelectorAll('.filter-btn');
-  const isHidden = filters[0].style.display === 'none';
+document.getElementById("toggle-filters").addEventListener("click", function() {
+  var filters = document.querySelectorAll(".filter-btn");
+  var isHidden = filters[0].style.display === "none";
   
-  filters.forEach(btn => {
-    btn.style.display = isHidden ? 'inline-block' : 'none';
+  filters.forEach(function(btn) {
+    btn.style.display = isHidden ? "inline-block" : "none";
   });
   
-  this.textContent = isHidden ? 'Filters ▲' : 'Filters ▼';
+  this.textContent = isHidden ? "Filters (hide)" : "Filters (show)";
   
-  // Reset filters when closing
   if (!isHidden) {
-    // Show all cards
-    document.querySelectorAll('.card-wrapper').forEach(card => {
-      card.classList.remove('hidden');
+    document.querySelectorAll(".card-wrapper").forEach(function(card) {
+      card.classList.remove("hidden");
     });
     
-    // Reset active button to All
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.getAttribute('data-filter') === 'all') {
-        btn.classList.add('active');
+    document.querySelectorAll(".filter-btn").forEach(function(btn) {
+      btn.classList.remove("active");
+      if (btn.getAttribute("data-filter") === "all") {
+        btn.classList.add("active");
       }
     });
   }
 });
 
-// Hide filter buttons on page load
-document.querySelectorAll('.filter-btn').forEach(btn => btn.style.display = 'none');
+document.querySelectorAll(".filter-btn").forEach(function(btn) {
+  btn.style.display = "none";
+});
 </script>
 
 <!-- Filters script -->
 <script>
-document.querySelectorAll('.filter-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
+document.querySelectorAll(".filter-btn").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll(".filter-btn").forEach(function(b) {
+      b.classList.remove("active");
+    });
+    this.classList.add("active");
     
-    const filter = this.getAttribute('data-filter');
+    var filter = this.getAttribute("data-filter");
     
-    document.querySelectorAll('.card-wrapper').forEach(function(card) {
-      if (filter === 'all') {
-        card.classList.remove('hidden');
+    document.querySelectorAll(".card-wrapper").forEach(function(card) {
+      if (filter === "all") {
+        card.classList.remove("hidden");
       } else {
-        // Check data-tags or visible tags
-        const dataTags = card.getAttribute('data-tags') || '';
-        const hasDataTag = dataTags.split(' ').includes(filter);
-        const hasVisibleTag = card.querySelector('.project-tag.' + filter);
+        var dataTags = card.getAttribute("data-tags") || "";
+        var hasDataTag = dataTags.split(" ").indexOf(filter) !== -1;
+        var hasVisibleTag = card.querySelector(".project-tag." + filter);
         
         if (hasDataTag || hasVisibleTag) {
-          card.classList.remove('hidden');
+          card.classList.remove("hidden");
         } else {
-          card.classList.add('hidden');
+          card.classList.add("hidden");
         }
       }
     });
