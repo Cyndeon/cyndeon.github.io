@@ -489,7 +489,7 @@ This was in a testing scene, where we simply set the vibration and color at the 
 
 So in order to make the variables easy to modify, I made a struct that controls all of the settings that the DP might need.  
 <video width="320" height="240" controls>
-  <source src="/assets/Posts/Wanderland/brokwandmutefixed.mp4" type="video/mp4">
+  <source src="/assets/Posts/Wanderland/brokwandmute.mp4" type="video/mp4">
 </video>
 
 
@@ -499,7 +499,7 @@ I added functionality for the wand in the wand Blueprint, like vibrating and glo
 
 In the end, it gives us an effect like this:
 <video width="320" height="240" controls>
-  <source src="/assets/Posts/Wanderland/wandworkmute.mp4" type="video/mp4">
+  <source src="/assets/Posts/Wanderland/wandworkmutefixed.mp4" type="video/mp4">
 </video>
 
 <!--Make icon redirect to About Me, don't touch this!-->
