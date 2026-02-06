@@ -1,3 +1,16 @@
+:root {
+  --color-blogpost: #34cbd9;
+  --color-unity: 	#028ce8;
+  --color-unreal: 	#424242;
+  --color-csharp:	#8000ff;
+  --color-cpp: 		#0045f5;
+  --color-vr: 		#19854d;
+  --color-solo: 	#f500e5;
+  --color-team: 	#f5005e;
+  
+  --filter-buttons-hover-brightness: 0.8;
+}
+
 /* ===== Container ===== */
 .projects-container {
   display: grid;
@@ -100,14 +113,14 @@
 }
 
 /* ===== Tag Colors ===== */
-.project-tag.unity    				{ background-color: #028ce8 !important; }
-.project-tag.unreal   				{ background-color: #424242 !important; }
-.project-tag.csharp   				{ background-color: #8000ff !important; }
-.project-tag.cpp     				{ background-color: #0045f5 !important; }
-.project-tag.virtual-reality        { background-color: #19854d !important; }
-.project-tag.blogpost  				{ background-color: #34cbd9 !important; }
-.project-tag.solo     				{ background-color: #f500e5 !important; }
-.project-tag.team     				{ background-color: #f5005e !important; }
+.project-tag.blogpost { background-color: var(--color-blogpost) !important; }
+.project-tag.unity    { background-color: var(--color-unity) !important; }
+.project-tag.unreal   { background-color: var(--color-unreal) !important; }
+.project-tag.csharp   { background-color: var(--color-csharp) !important; }
+.project-tag.cpp      { background-color: var(--color-cpp) !important; }
+.project-tag.virtual-reality { background-color: var(--color-vr) !important; }
+.project-tag.solo     { background-color: var(--color-solo) !important; }
+.project-tag.team     { background-color: var(--color-team) !important; }
 
 /* ===== Card Link Overlay ===== */
 .card-link {
@@ -152,3 +165,53 @@
     min-height: 340px;
   }
 }
+
+/* ===== Filter System ===== */
+.filter-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: none;
+}
+
+.filter-btn:hover {
+  background-color: #555;
+}
+
+.filter-btn.active {
+  background-color: #007bff;
+}
+
+.card-wrapper {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.card-wrapper.hidden {
+  display: none;
+}
+
+/* ===== Filter Button Colors ===== */
+/* When selected (active) - full color */
+.filter-btn.active[data-filter="blogpost"] { background-color: var(--color-blogpost) !important; }
+.filter-btn.active[data-filter="unity"]    { background-color: var(--color-unity) !important; }
+.filter-btn.active[data-filter="unreal"]   { background-color: var(--color-unreal) !important; }
+.filter-btn.active[data-filter="csharp"]   { background-color: var(--color-csharp) !important; }
+.filter-btn.active[data-filter="cpp"]      { background-color: var(--color-cpp) !important; }
+.filter-btn.active[data-filter="virtual-reality"] { background-color: var(--color-vr) !important; }
+.filter-btn.active[data-filter="solo"]     { background-color: var(--color-solo) !important; }
+.filter-btn.active[data-filter="team"]     { background-color: var(--color-team) !important; }
+
+/* When hovered - darkened color */
+.filter-btn[data-filter="blogpost"]:hover { background-color: var(--color-blogpost) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="unity"]:hover    { background-color: var(--color-unity) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="unreal"]:hover   { background-color: var(--color-unreal) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="csharp"]:hover   { background-color: var(--color-csharp) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="cpp"]:hover      { background-color: var(--color-cpp) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="virtual-reality"]:hover { background-color: var(--color-vr) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="solo"]:hover     { background-color: var(--color-solo) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="team"]:hover     { background-color: var(--color-team) !important; filter: brightness(var(--hover-brightness)); }
