@@ -6,6 +6,7 @@
   --color-csharp:	#8000ff;
   --color-cpp: 		#0045f5;
   --color-vr: 		#19854d;
+  --color-tools:	#858008;
   --color-solo: 	#f500e5;
   --color-team: 	#f5005e;
   
@@ -132,6 +133,7 @@
 .project-tag.csharp   { background-color: var(--color-csharp) !important; }
 .project-tag.cpp      { background-color: var(--color-cpp) !important; }
 .project-tag.virtual-reality { background-color: var(--color-vr) !important; }
+.project-tag.tools { background-color: var(--color-tools) !important; }
 .project-tag.solo     { background-color: var(--color-solo) !important; }
 .project-tag.team     { background-color: var(--color-team) !important; }
 
@@ -189,7 +191,7 @@ html .projects-container {
 }
 
 .filter-btn:hover {
-  background-color: #555;
+  filter: brightness(var(--filter-buttons-hover-brightness));
 }
 
 .filter-btn.active {
@@ -213,6 +215,7 @@ html .projects-container {
 .filter-btn.active[data-filter="csharp"]   { background-color: var(--color-csharp) !important; }
 .filter-btn.active[data-filter="cpp"]      { background-color: var(--color-cpp) !important; }
 .filter-btn.active[data-filter="virtual-reality"] { background-color: var(--color-vr) !important; }
+.filter-btn.active[data-filter="tools"]     { background-color: var(--color-tools) !important; }
 .filter-btn.active[data-filter="solo"]     { background-color: var(--color-solo) !important; }
 .filter-btn.active[data-filter="team"]     { background-color: var(--color-team) !important; }
 
@@ -224,6 +227,7 @@ html .projects-container {
 .filter-btn[data-filter="csharp"]:hover   { background-color: var(--color-csharp) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
 .filter-btn[data-filter="cpp"]:hover      { background-color: var(--color-cpp) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
 .filter-btn[data-filter="virtual-reality"]:hover { background-color: var(--color-vr) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="tools"]:hover     { background-color: var(--color-tools) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
 .filter-btn[data-filter="solo"]:hover     { background-color: var(--color-solo) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
 .filter-btn[data-filter="team"]:hover     { background-color: var(--color-team) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
 

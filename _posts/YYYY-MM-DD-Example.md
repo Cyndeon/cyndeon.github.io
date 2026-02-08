@@ -1,10 +1,10 @@
 ---
 title: Placeholder
-date: YYYY-MM-DDTHH:MM:SS
+date: YYYY-MM-DDTHH:MM:00
 categories:
-  - Example
+  - See Categories in [Site rules for new content] document
 tags:
-  - example
+- See Tags in [Site rules for new content] document
 description: A description
 toc: true
 image: assets/Thumbnails/name.png

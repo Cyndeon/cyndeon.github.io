@@ -2,14 +2,14 @@
 title: Wanderland
 date: 2026-02-05T22:39:00
 categories:
-  - Programming
-  - Unreal
-  - Tools
+- Games
+- Released
 tags:
-  - leadRole
-  - cpp
-  - blueprints
-  - plugin
+- Unreal
+- Cpp
+- Tools
+- Team
+- Lead
 description: The work I did while working on the game Wanderland, where I was the lead programmer
 toc: true
 image: assets/Thumbnails/Wanderland.png

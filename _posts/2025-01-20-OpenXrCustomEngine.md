@@ -2,13 +2,13 @@
 title: How I implemented OpenXR rendering into a custom engine in C++
 date: 2025-01-20 18:33:00 +/-0100
 categories:
-  - Programming
-  - Virtual-Reality
+- Technical
+- Deepdive
 tags:
-  - cpp
-  - openxr
-  - opengl
-  - customengine
+- Cpp
+- VR
+- Tools
+- Solo
 description: A blog about how to implement OpenXR rendering into a custom C++ engine.
 toc: true
 media_subpath: /assets/
@@ -24,7 +24,7 @@ image: Thumbnails/Colored.png
 
 💡 **Technical Skills Applied:** 
 - SDK (OpenXR) integration into custom engine
-- Software architecture, 
+- Software architecture
 - Plugin development for custom engine
 
 🤝 **Soft Skills:** 

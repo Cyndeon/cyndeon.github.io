@@ -20,12 +20,12 @@ order: 1 # Adjust based on where you want it in the nav
   <button class="filter-btn" data-filter="cpp">C++</button>
   <button class="filter-btn" data-filter="csharp">C#</button>
   <button class="filter-btn" data-filter="virtual-reality">VR</button>
+  <button class="filter-btn" data-filter="tools">Tools</button>
   <button class="filter-btn" data-filter="solo">Solo</button>
   <button class="filter-btn" data-filter="team">Team</button>
   <!-- Hidden Tags -->
-  <button class="filter-btn" data-filter="tools">Tools</button>
   <button class="filter-btn" data-filter="gamejam">Gamejam</button>
-  <button class="filter-btn" data-filter="lead">LeadRole</button>
+  <button class="filter-btn" data-filter="lead">Lead</button>
 </div>
 
 <div class="projects-container">
@@ -33,7 +33,7 @@ order: 1 # Adjust based on where you want it in the nav
 <!-- Blog, Engine, Language, Other tags (in order of you want the user to see), Solo/Team -->
 
 <!-- UE5 Achievement Plugin -->
-<div class="card-wrapper" data-tags="tools">
+<div class="card-wrapper">
     <div class="project-card">
       <div class="card-image">
         <img src="/assets/Thumbnails/UE5AchievementPlugin.png" alt="">
@@ -45,6 +45,7 @@ order: 1 # Adjust based on where you want it in the nav
           <span class="project-tag blogpost">Blog</span>
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
+          <span class="project-tag tools">Tools</span>
           <span class="project-tag solo">Solo</span>
         </div>
       </div>
@@ -53,7 +54,7 @@ order: 1 # Adjust based on where you want it in the nav
 </div>
 
 <!-- Wanderland -->
-<div class="card-wrapper" data-tags="tools lead">
+<div class="card-wrapper" data-tags="lead">
     <div class="project-card">
       <div class="card-image">
         <img src="/assets/Thumbnails/Wanderland.png" alt="">
@@ -65,6 +66,7 @@ order: 1 # Adjust based on where you want it in the nav
           <span class="project-tag blogpost">Blog</span>
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
+          <span class="project-tag tools">Tools</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
@@ -111,7 +113,7 @@ order: 1 # Adjust based on where you want it in the nav
 </div>
 
 <!-- OpenXR -->
-<div class="card-wrapper" data-tags="tools">
+<div class="card-wrapper">
     <div class="project-card">
       <div class="card-image">
         <img src="/assets/Thumbnails/OpenXRCpp.png" alt="">
@@ -147,7 +149,7 @@ order: 1 # Adjust based on where you want it in the nav
           <span class="project-tag team">Team</span>
         </div>
       </div>
-      <a href="/" class="card-link"></a>
+      <a href="/posts/BrainInc" class="card-link"></a>
     </div>
 </div>
 
