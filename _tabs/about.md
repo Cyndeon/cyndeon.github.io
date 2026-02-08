@@ -107,7 +107,6 @@ order: 5
     <li>Marketplace Publishing (FAB)</li>
     <li>Fluent in English & Dutch</li>
 </ul>
-</ul>
 
 <!--Make icon redirect to the Portfolio page, don't touch this!-->
 <script> document.querySelectorAll('#sidebar #avatar, #sidebar .site-title').forEach(function(link) { link.href = '/portfolio/'; }); </script>
