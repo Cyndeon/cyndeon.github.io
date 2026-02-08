@@ -1,6 +1,9 @@
 # Justin's Site
 
+Welcome to the page for my portfolio website!
+Feel free to browse around if you are interested what some of the customized parts of my website look like, or check out the actual page at cyndeon.github.io
 
+If you have any suggestions, feedback or issues you found (the latter being impossible because I make perfect portfolios with 0 issues), feel free to create an Issue in this repo or reach out to me at justingamedeveloperbusiness@gmail.com
 
 
 
