@@ -10,6 +10,22 @@ toc: true
 image: assets/Thumbnails/name.png
 ---
 
+## Project Overview
+
+🛠 **Tools:** 
+- Engine
+- Languages
+- Plugins
+- Etc.
+
+💡 **Technical Skills Applied:** 
+- Examples of technical skills
+
+🤝 **Soft Skills:** 
+- Examples of soft skills
+
+## Introduction
+Explain here how I got the idea and some more things that are relevant
 
 
 

@@ -1,14 +1,15 @@
 :root {
+  --color-all:		#a8a8a8;
   --color-blogpost: #34cbd9;
   --color-unity: 	#028ce8;
-  --color-unreal: 	#424242;
+  --color-unreal: 	#141414;
   --color-csharp:	#8000ff;
   --color-cpp: 		#0045f5;
   --color-vr: 		#19854d;
   --color-solo: 	#f500e5;
   --color-team: 	#f5005e;
   
-  --filter-buttons-hover-brightness: 0.8;
+  --filter-buttons-hover-brightness: 0.82;
 }
 
 /* ===== Container ===== */
@@ -20,6 +21,18 @@
   width: 100% !important;
   margin: 0 auto;
   padding: 20px;
+}
+
+@media (max-width: 1450px) {
+  .projects-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 750px) {
+  .projects-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ===== Card Wrapper ===== */
@@ -132,39 +145,35 @@
   z-index: 10;
 }
 
-/* ===== Light Mode ===== */
-@media (prefers-color-scheme: light) {
-  .project-card {
-    background: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .project-card h3 {
-    color: #1a1a1a !important;
-  }
-  
-  .project-card .card-description {
-    color: rgba(0, 0, 0, 0.6) !important;
-  }
+/* ===== Force Dark Mode Colors Always ===== */
+html[data-mode="light"] .project-card,
+html .project-card {
+  background: #2b2b2b !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* ===== Mobile Responsive ===== */
-@media (max-width: 900px) {
-  .projects-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+html[data-mode="light"] .project-card h3,
+html .project-card h3 {
+  color: #ffffff !important;
 }
 
-@media (max-width: 640px) {
-  .projects-container {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
-  
-  .project-card {
-    min-height: 340px;
-  }
+html[data-mode="light"] .project-card .card-description,
+html .project-card .card-description {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
+
+html[data-mode="light"] .filter-btn,
+html .filter-btn {
+  background-color: #333 !important;
+  color: white !important;
+}
+
+html[data-mode="light"] .projects-container,
+html .projects-container {
+  background: transparent !important;
+}
+
+
 
 /* ===== Filter System ===== */
 .filter-btn {
@@ -197,6 +206,7 @@
 
 /* ===== Filter Button Colors ===== */
 /* When selected (active) - full color */
+.filter-btn.active[data-filter="all"] 	   { background-color: var(--color-all) !important; }
 .filter-btn.active[data-filter="blogpost"] { background-color: var(--color-blogpost) !important; }
 .filter-btn.active[data-filter="unity"]    { background-color: var(--color-unity) !important; }
 .filter-btn.active[data-filter="unreal"]   { background-color: var(--color-unreal) !important; }
@@ -207,11 +217,16 @@
 .filter-btn.active[data-filter="team"]     { background-color: var(--color-team) !important; }
 
 /* When hovered - darkened color */
-.filter-btn[data-filter="blogpost"]:hover { background-color: var(--color-blogpost) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="unity"]:hover    { background-color: var(--color-unity) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="unreal"]:hover   { background-color: var(--color-unreal) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="csharp"]:hover   { background-color: var(--color-csharp) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="cpp"]:hover      { background-color: var(--color-cpp) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="virtual-reality"]:hover { background-color: var(--color-vr) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="solo"]:hover     { background-color: var(--color-solo) !important; filter: brightness(var(--hover-brightness)); }
-.filter-btn[data-filter="team"]:hover     { background-color: var(--color-team) !important; filter: brightness(var(--hover-brightness)); }
+.filter-btn[data-filter="all"]:hover { background-color: var(--color-all) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="blogpost"]:hover { background-color: var(--color-blogpost) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="unity"]:hover    { background-color: var(--color-unity) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="unreal"]:hover   { background-color: var(--color-unreal) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="csharp"]:hover   { background-color: var(--color-csharp) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="cpp"]:hover      { background-color: var(--color-cpp) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="virtual-reality"]:hover { background-color: var(--color-vr) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="solo"]:hover     { background-color: var(--color-solo) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+.filter-btn[data-filter="team"]:hover     { background-color: var(--color-team) !important; filter: brightness(var(--filter-buttons-hover-brightness)); }
+
+#toggle-filters:hover {
+  filter: brightness(var(--filter-buttons-hover-brightness));
+}

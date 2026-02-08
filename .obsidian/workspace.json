@@ -20,23 +20,8 @@
               "icon": "lucide-file",
               "title": "portfolio"
             }
-          },
-          {
-            "id": "0e54ed744f618cde",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "_posts/2026-02-05-Wanderland.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "2026-02-05-Wanderland"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -179,37 +164,38 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0e54ed744f618cde",
+  "active": "b7887de8efcf0bf3",
   "lastOpenFiles": [
-    "_posts/YYYY-MM-DD-Example.md",
-    "_posts/2026-02-05-Wanderland.md",
+    "_site/assets/Thumbnails/BrainInc.png",
+    "assets/Thumbnails/BrainInc.png",
+    "_site/assets/Thumbnails/BrainInc_.png",
+    "assets/Thumbnails/BrainInc_.png",
+    "_site/assets/Thumbnails/BrainInc_logo.png",
+    "assets/Thumbnails/BrainInc_logo.png",
+    "_tabs/categories.md",
+    "_tabs/about.md",
     "_posts/2025-01-20-OpenXrCustomEngine.md",
     "_posts/2026-02-03-UE5AchievementPlugin.md",
-    "_tabs/about.md",
+    "_posts/YYYY-MM-DD-Example.md",
+    "_posts/2026-02-05-Wanderland.md",
     "_tabs/archives.md",
-    "_tabs/categories.md",
-    "_tabs/tags.md",
     "_tabs/portfolio.md",
+    "_site/assets/Posts/Wanderland/wandworkmutefixed.mp4",
+    "assets/Posts/Wanderland/wandworkmutefixed.mp4",
+    "assets/Posts/Wanderland/wandworkmutefixed.mp4.opdownload",
+    "assets/Posts/Wanderland/wandworkmute.mp4",
+    "_tabs/tags.md",
     "_includes/custom-head.html",
     "_includes/New Text Document.txt",
     "_includes",
     "New folder",
     "_site/assets/Posts/Wanderland/lightonmute.mp4",
     "assets/Posts/Wanderland/lightonmute.mp4",
-    "assets/Posts/Wanderland/lightonmute.mp4.opdownload",
-    "_site/assets/Posts/Wanderland/BossAttackFlickermute.mp4",
-    "assets/Posts/Wanderland/BossAttackFlickermute.mp4",
-    "assets/Posts/Wanderland/BossAttackFlickermute.mp4.opdownload",
     "_site/assets/Posts/Wanderland/rlog2.png",
     "_site/assets/Posts/Wanderland/rlog.png",
     "_site/assets/Posts/Wanderland/callstatefunction.png",
     "_site/assets/Posts/Wanderland/bpnodes.png",
     "_site/assets/Posts/Wanderland/bossHighlightFlicker.png",
-    "_site/assets/Posts/Wanderland/afterfunction.png",
-    "_site/assets/Posts/Wanderland/BossAttackFlicker.gif",
-    "assets/Posts/Wanderland/bpnodes.png",
-    "assets/Posts/Wanderland/bossHighlightFlicker.png",
-    "assets/Posts/Wanderland/BossAttackFlicker.gif",
     "_tabs/posts.md",
     "_site/tabs/posts.md",
     "_site/tabs/Untitled.md",

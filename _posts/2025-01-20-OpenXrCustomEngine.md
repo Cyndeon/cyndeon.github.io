@@ -14,12 +14,29 @@ toc: true
 media_subpath: /assets/
 image: Thumbnails/Colored.png
 ---
+## Project Overview
+
+🛠 **Tools:** 
+- Bee (Custom Engine made by BUAS)
+- C++
+- [OpenXR by Khronos](https://github.com/KhronosGroup/OpenXR-SDK)
+- Rift S / Quest 2 (for testing)
+
+💡 **Technical Skills Applied:** 
+- SDK (OpenXR) integration into custom engine
+- Software architecture, 
+- Plugin development for custom engine
+
+🤝 **Soft Skills:** 
+- Planning
+- Problem-solving
+
 ## Introduction
 
 I am Justin, a second year student at BUAS and for the past 7 weeks, I have been working on implementing OpenXR into a custom engine made by the lecturers here called "Bee".
 During the process of implementing OpenXR I have learned a lot about not only OpenXR, but also OpenGL, which is the rendering library that Bee uses. Of course, none of this hasn't been without running into many obstacles. In this blog post I will explain how I implemented OpenXR and combined it with the pre-existing Bee library. I will go over what my original plans were, how I got the required scripts to run, how I made the rendering using the OpenXR swapchains combined with OpenGL and much more!
 
-It is worth keeping in mind that I used my Rift S to test any code that I wrote. While OpenXR does support most, if not all major headsets, some things might work differently based on the headset you use.
+It is worth keeping in mind that I used my Rift S to test any code that I wrote. While OpenXR does support most major headsets, some things might work differently based on the headset you use.
 
 For those wishing to skip straight to the end and/or take a look at my code, I below will be the entire class. Please keep in mind that there are some variables and functions for OpenXR's input that do not work as of writing this! The files are unfiltered and will likely contain things your project might not, though, you could always check these files to see the full versions of what I will explain here in this post.
 [VrManager Class](https://github.com/Cyndeon/cyndeon.github.io/blob/main/assets/Posts/OpenXrCustomEngine/vrmanager.rar)

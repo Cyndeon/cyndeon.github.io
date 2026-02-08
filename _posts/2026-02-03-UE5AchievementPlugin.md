@@ -13,6 +13,27 @@ description: A blog describing code I used to create my Achievement Plugin for U
 toc: true
 image: assets/Thumbnails/UE5AchievementPlugin.png
 ---
+
+## Project Overview
+
+🛠 **Tools:** 
+- Unreal Engine 5
+- C++
+
+💡 **Technical Skills Applied:** 
+- Plugin architecture
+- SDK integration (Steamworks/EOS)
+- Saving/loading system (using UE5's),
+- UI Widgets
+- Blueprint API design
+- Cross-version compatibility (UE 5.5-5.7) 
+
+🤝 **Soft Skills:**
+- Planning
+- Problem-solving
+- Documentation (entire wiki for this one)
+- Marketplace publishing (FAB)
+
 ## Introduction
 The goal for this project was to **make an achievement plugin that supports local achievements, with support to sync progress to Steam and Epic, with custom UI popups and all of this should be able to be controlled via Blueprint, with no C++ required**.  
 

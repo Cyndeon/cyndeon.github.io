@@ -14,6 +14,28 @@ description: The work I did while working on the game Wanderland, where I was th
 toc: true
 image: assets/Thumbnails/Wanderland.png
 ---
+
+## Project Overview
+
+🛠 **Tools:** 
+- Unreal Engine 5
+- C++
+
+💡 **Technical Skills Applied:** 
+- C++ to UE5 code conversion & plugin architecture
+- Plugin architecture
+- Multi-threading (FRunnable)
+- Blueprint API design & exposure
+- Subsystem architecture (UEngineSubsystem)
+- State machine implementation
+
+🤝 **Soft Skills:**
+- Team leadership (managing 2 programmers)
+- Cross-discipline collaboration (designers, artists, hardware)
+- Project planning & sprint management
+- Problem-solving
+
+
 ## Introduction
 
 Wanderland is a real-life magical experience where you become a wizard. Cast elemental magic, bend reality and join your fellow mages to battle colossal, magical bosses in a chaotic world on the edge of collapse. Team up, take aim and become the Wizard hero that Wanderland needs!
