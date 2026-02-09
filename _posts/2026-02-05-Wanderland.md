@@ -12,8 +12,8 @@ tags:
 - Lead
 description: The work I did while working on the game Wanderland, where I was the lead programmer
 toc: true
-image: assets/Thumbnails/Wanderland.png
 ---
+{% include embed/youtube.html id='pIDqjYyMaUg' %}
 
 ## Project Overview
 
@@ -54,7 +54,7 @@ For the same reason, there are also some unfinished items in here. One of the bo
 I also will refer to people called "DP" from time to time, which were the designers who were the ones working on the actual experience. Us programmers mostly worked on tools to make their lives easier, as well as the boss attacks, but they worked on the gameplay loop, optimizing player fun etc.
 
 
-### AsteraTubes Helios lights
+## AsteraTubes Helios lights
 One of my main tasks was working on the AsteraTubes Helios lights (from now own will be shortened to Tubes).
 The idea was to make the boss attack in 4 different zones, and these zones would be shown to the player by using these lights.
 We had access to 4 Tubes  at a time with 4 as backup so we could switch them out if the originals ran out of power. Each Tube has 8 lights inside of them, all with RGB values.
@@ -126,7 +126,7 @@ So I didn't work on the boss this project, however, this seems to me like the co
 This is how one would use the functionality I gave them access to. The target the DMX Controller, which, the name of the light is an enum to make it easier for DP to find, they have a custom color they set as well as a boolean for using a random color (which is never used for as far as I know). They also set the duration and keep the interval the exact same over the course of the attack, which is a shame as I did bring up numerous times that it could flicker faster as the attack came closer, however, design is not something I have that much control over if at all really.  
 It is however that simple to use the lights. I talked a lot with Robin (the PR who worked on the Bosses for the entire project alongside some other things) about what he wanted and about how we wanted to go about implementing this and as you can see, despite some unused functionality, is super simple to use with enough customizability.
 
-### Custom Wand Connection Plugin
+## Custom Wand Connection Plugin
 So my second main task was creating a custom Plugin for Unreal that would allow us to connect the wands to Unreal and allow us to controls its behavior (Vibration and LED colors) by using Blueprint nodes.  
 This requires a bit of an explanation so that will come first, the actual work comes right after.  
 We always wanted custom wands, however, Phil was working on a personal project where he had a custom wand with LEDs and a small rumble motor inside as well as a little chip that would allow it to connect a computer. He also had quite a lot of code already, however, that was in just C++. We really wanted to make the wands more interactive by using those techniques we saw Phil use and he agreed to help us out wherever possible. The thing is that we couldn't just copy-paste all his code from C++ straight into Unreal and expect it to work, so we decided that someone should convert Phil's scripts' code from C++ to Unreal (at least the main big script). I suggested that it should be a plugin since a plugin could be made in a separate project and would prevent forcing the entire team from installing Visual Studio and making them understand how to build the project. Sure it wouldn't have taken long, but could've caused confusion if any issues would arise, so a plugin was the better approach. Then there was also the control part, we had to be able to change the behavior of the wand using blueprint nodes, since we have a blueprint-only project.  

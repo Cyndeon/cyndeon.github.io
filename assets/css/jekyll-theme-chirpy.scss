@@ -8,12 +8,27 @@
 ';
 
 
+/* Makes code blocks wrap around */
 pre, code {
   white-space: pre-wrap !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
 }
 
+/* Hides home button */
 #sidebar .nav-item:first-child {
   display: none !important;
+}
+
+/* Hide search bar permanently */
+#search-trigger,
+#search,
+#search-cancel {
+  display: none !important;
+}
+
+a.preview-img,
+a.img-link.preview-img {
+  pointer-events: none !important;
+  cursor: default !important;
 }

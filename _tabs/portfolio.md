@@ -1,15 +1,30 @@
 ---
-title: Portfolio
 icon: fas fa-solid fa-circle-user # Choose an icon from FontAwesome
 order: 1 # Adjust based on where you want it in the nav
 ---
 <link rel="stylesheet" href="/assets/css/cards.css">
 
-<div style="position: relative; pointer-events: none;"> <p style="position: absolute; top: -28px; left: 0; right: 0; text-align: right; color: #888; font-size: 0.8rem;"> Here are some of the projects I've worked on. For more information on my work in detail, check out the pages with the 'Blog' tag! </p> </div>
+<!-- Removes title at the top -->
+<style>
+h1.dynamic-title {
+  display: none !important;
+}
+</style>
+
+<!-- Removes right side bar -->
+<style>
+#panel-wrapper {
+  display: none !important;
+}
+main.col-12.col-lg-11.col-xl-9 {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+</style>
 
 <!-- Filter Button -->
-<div class="filter-container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 20px;">
-  <button id="toggle-filters" style="background-color: #444; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer;">Filters ▼</button>
+<div class="filter-container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 0px; margin-top: -42px; margin-bottom: -12px">
+  <button id="toggle-filters" style="background-color: #444; color: white; border: none; padding: 4px 8px; border-radius: 50px; cursor: pointer;">Filters ▼</button>
 
 <!-- Specific Filter Buttons -->
 <button class="filter-btn active" data-filter="all" style="display: none;">All</button>
@@ -33,14 +48,23 @@ order: 1 # Adjust based on where you want it in the nav
 <!-- Blog, Engine, Language, Other tags (in order of you want the user to see), Solo/Team -->
 
 <!-- UE5 Achievement Plugin -->
-<div class="card-wrapper">
-    <div class="project-card">
+<div class="card-wrapper highlight" style="--highlight-gradient-start: #960bdb; --highlight-gradient-end: #1535e8;" data-tags="tools lead">
+  <div class="project-card highlight">
+    <div class="card-inner">
       <div class="card-image">
         <img src="/assets/Thumbnails/UE5AchievementPlugin.png" alt="">
       </div>
       <div class="card-content">
         <h3>UE5 Achievement Plugin</h3>
-        <p class="card-description">A custom achievement system plugin for Unreal Engine 5.</p>
+        <p class="card-description">A custom achievement system plugin for Unreal Engine 5 with EOS and Steamworks support</p>
+        <ul class="card-skills">
+		<li>Plugin architecture</li>
+		<li>SDK integration (Steamworks/EOS)</li>
+		<li>Saving/loading system (using UE5's),</li>
+		<li>UI Widgets</li>
+		<li>Blueprint API design</li>
+		<li>Cross-version compatibility (UE 5.5-5.7)</li>
+        </ul>
         <div class="project-tags">
           <span class="project-tag blogpost">Blog</span>
           <span class="project-tag unreal">Unreal</span>
@@ -49,29 +73,39 @@ order: 1 # Adjust based on where you want it in the nav
           <span class="project-tag solo">Solo</span>
         </div>
       </div>
-      <a href="/posts/UE5AchievementPlugin/" class="card-link"></a>
     </div>
+    <a href="/posts/UE5AchievementPlugin/" class="card-link"></a>
+  </div>
 </div>
 
 <!-- Wanderland -->
-<div class="card-wrapper" data-tags="lead">
-    <div class="project-card">
+<div class="card-wrapper highlight" style="--highlight-gradient-start: #f264f5; --highlight-gradient-end: #64a8f5;" data-tags="tools lead">
+  <div class="project-card highlight">
+    <div class="card-inner">
       <div class="card-image">
         <img src="/assets/Thumbnails/Wanderland.png" alt="">
       </div>
       <div class="card-content">
         <h3>Wanderland</h3>
         <p class="card-description">A magical experience where you fight a boss with physical wands in real life</p>
+        <ul class="card-skills">
+		<li>C++ to UE5 code conversion & plugin architecture </li>
+		<li>Plugin architecture </li>
+		<li>Multi-threading (FRunnable) </li>
+		<li>Blueprint API design & exposure </li>
+		<li>Subsystem architecture (UEngineSubsystem) </li>
+		<li>State machine implementation </li>
+        </ul>
         <div class="project-tags">
           <span class="project-tag blogpost">Blog</span>
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
-          <span class="project-tag tools">Tools</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
-      <a href="/posts/Wanderland/" class="card-link"></a>
     </div>
+    <a href="/posts/Wanderland/" class="card-link"></a>
+  </div>
 </div>
 
 <!-- ORTUS -->
