@@ -32,3 +32,10 @@ a.img-link.preview-img {
   pointer-events: none !important;
   cursor: default !important;
 }
+
+#sidebar #avatar img {
+    width: 112px;
+    height: 110px;  /* taller */
+    object-fit: cover;
+    object-position: top center;
+}

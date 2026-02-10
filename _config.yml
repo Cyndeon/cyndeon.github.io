@@ -17,14 +17,14 @@ timezone: Europe/Amsterdam
 
 title: Justin Comans # the main title
 
-tagline: The portfolio of a programmer/game dev who is enthusiastic about VR development! # it will display as the subtitle
+tagline: The portfolio of a programmer specializing in creating useful Tools and VR games/experiences! # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   A portfolio.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
-url: "https://cyndeon.github.io/"
+url: "https://cyndeon.github.io"
 
 github:
   username: cyndeon # change to your GitHub username
@@ -99,7 +99,7 @@ theme_mode: dark # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: assets/AboutMe/DieselAndME.jpeg
+avatar: assets/Justin.jpg
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.

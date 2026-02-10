@@ -7,39 +7,72 @@ order: 5
 {% assign seconds_in_year = 31556952 %}
 {% assign age = now | minus: birth_date | divided_by: seconds_in_year | floor %}
 
+<!-- Removes title at the top -->
+<style>
+h1.dynamic-title {
+  display: none !important;
+}
+</style>
+
+<!-- Removes right side bar -->
+<style>
+#panel-wrapper {
+  display: none !important;
+}
+main.col-12.col-lg-11.col-xl-9 {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+</style>
+
 <style>
 .about-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 0px;
-    gap: 20px;
+    gap: 40px;
+    max-width: 100%;
+    width: 100%;
+    transform: translateY(20px);
 }
 
-.about-image-left { width: 600px; min-width: 400px; height: 600px; object-fit: cover; border-radius: 8px; }
+.about-image-left {
+    width: 350px;
+    min-width: 280px;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    margin-left: -180px;
+    transform: translateY(20px);
+}
 
 .about-text-container {
-    max-width: 600px;
+    flex-grow: 1;
     line-height: 1.6;
     position: relative;
-    padding-top: 250px;
-}
-
-.about-image-small {
-    width: 300px;
-    height: auto;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 8px;
+    padding-top: 0;
+    max-width: none;
+    width: 100%;
 }
 
 .about-text {
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 1.7;
+}
+
+.about-text strong {
     font-weight: bold;
 }
 
-/* Mobile styles */
+@media (max-width: 1700px) {
+    .about-image-left {
+        margin-left: 0;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 900px) {
     .about-container {
         flex-direction: column;
@@ -47,33 +80,23 @@ order: 5
     }
     
     .about-image-left {
-        width: 100%;
-        max-width: 400px;
-        height: 500px;
-    }
-    
-    .about-text-container {
-        padding-top: 0;
-        text-align: center;
-    }
-    
-    .about-image-small {
-        position: relative;
-        left: 0;
+        margin-left: 0;
         transform: none;
-        margin: 0 auto 20px auto;
-        display: block;
+        width: 100%;
+        max-width: 350px;
+        height: 450px;
     }
 }
 </style>
+
+
 
 <div class="about-container">
     <img src="/assets/AboutMe/DieselAndME.jpeg" alt="DieselTall" class="about-image-left">
     
     <div class="about-text-container">
-        <img src="/assets/Justin.jpg" alt="Small Image" class="about-image-small">
         <p class="about-text">
-            Hi, I'm Justin Comans!<br><br>
+            <b>Hi, I'm Justin Comans!</b><br>
             
             I'm a {{ age }}-year-old programmer specializing in plugin development and SDK integration for Unreal Engine 5. I've published tools to FAB Marketplace, led small programming teams, and built systems that make third-party services accessible through Blueprint nodes.<br><br>
             
