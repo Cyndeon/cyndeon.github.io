@@ -23,9 +23,9 @@ image: Thumbnails/Colored.png
 - Rift S / Quest 2 (for testing)
 
 💡 **Technical Skills Applied:** 
-- SDK (OpenXR) integration into custom engine
-- Software architecture
-- Plugin development for custom engine
+- [SDK (OpenXR) integration into custom engine](#implementing-openxr)
+- [Software architecture](#variables)
+- [Plugin development for custom engine](#implementing-openxr)
 
 🤝 **Soft Skills:** 
 - Planning

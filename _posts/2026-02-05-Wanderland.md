@@ -22,12 +22,12 @@ toc: true
 - C++
 
 💡 **Technical Skills Applied:** 
-- C++ to UE5 code conversion & plugin architecture
+- [C++ to UE5 code conversion & plugin architecture](#custom-wand-connection-plugin)
 - Plugin architecture
-- Multi-threading (FRunnable)
-- Blueprint API design & exposure
-- Subsystem architecture (UEngineSubsystem)
-- State machine implementation
+- [Multi-threading (FRunnable)](#frunnable)
+- [Blueprint API design & exposure](#blueprint-nodes)
+- [Subsystem architecture (UEngineSubsystem)](#subsystem)
+- [State machine implementation](#state-machine)
 
 🤝 **Soft Skills:**
 - Team leadership (managing 2 programmers)
@@ -77,7 +77,7 @@ Seizure warning for the flickering video!
 The Blueprint for it is relatively simple in concept but a little more complicated when actually put together.
 This is S_LightstickData, the struct that every Tube has to keep track of any variables it might need. Do keep in mind that the name used was before I realized that they were called AsteraTubes, that's why in code I refer to them as "lightstick", since it was easy to understand.
 ![](/assets/Posts/Wanderland/S_LightstickData.png)
-
+<span id="state-machine"></span>
 So the lights use a state machine to apply any state that they would need. As of right now there are 4 states, including a default one. We have "Waiting", "SetOn", "SetOff" and "Flickering". I think that the names are quite self-explanatory as to what the Tubes should do with that state, so let's get into the actual workings of the system.
 
 First of all, I have a list of S_LightstickData with 4 members in them. The reason I can just have a list with 4 members is because I always know that there will be 4 Tubes, no more, no less, so there is no need to set up some kind of loop to check which Tubes are active or anything (which is something I did at first) since the game cannot operate the way we want it to without exactly 4 Tubes, thus, the defaults work fine. The only difference between each element, at least at the start of the program, is the name, which is an enum called E_LightstickNames. I used strings at first, however, since the names are static (as in, they never change), I thought having it as an enum would make it much easier for the DP and/or other PRs to use. For our boss' attack zones, we use numbers 0 through 3, which I only found out about later since that feature was still being worked on, but that system fits perfectly with that of my lights. Simply cast that int to an E_LightstickNames and they've got the Tube they want to modify.
@@ -236,7 +236,7 @@ Here is how Phil handled creating a thread:
 	m_advertisementThread = std::thread(+[](void* user) { static_cast<ConnectionHandler*>(user)->BackgroundAdvertisementListener(); }, this);
 ```
 then, the function BackgroundAdvertisementListener() has a while(true) loop. This works fine for his purpose since this is a hobby project for him, however, I'll need to change this up to work with Unreal's multi-threading and use a variable for stopping the loop.
-
+<span id="frunnable"></span>
 I have 2 FRunnable classes:
 ```cpp
 class FAdvertisementThread : public FRunnable
@@ -334,6 +334,7 @@ That's a lot of headers, but this could easily be fixed with some # pragma regio
 
 There were some more things I learned throughout my experience though. For instance, there was a class or something somewhere that included a min/max, but that doesn't gel well with Unreal, so in my Build.cs I had to include ```PublicDefinitions.Add("NOMINMAX");``` in order to prevent it from doing that and allow Unreal to package the thing properly.
 
+<span id="subsystem"></span>
 After converting the main part of Phil's code, it was time to figure out how to make it update on its own. Of course Phil could just have a while(true) loop in his main, but I don't have that luxury. Luckily, he did have an idea of how I could do it. He told me about UEngineSubsystem and FTickableGameObject.  
 The first would allow me to have a singleton, meaning I could easily access the system from the Blueprint functions, and the FTickableGameObject which would allow the system to have an update loop. The entire class header is shown below:
 ```cpp
@@ -424,7 +425,7 @@ UINT32 UConnectionPluginBPLibrary::GetClientIDFromEnum(const WandSelections wand
 ```
 As you are able to see, I get a enum and then return a UINT32 that is the client ID I need. Phil told me how I can change the client ID for each individual wand, so in this case, having these numbers be set manually is not a big deal, since if any of the numbers for the wands are wrong by default, I can easily modify them.  
 However, if let's say, another person wants to use this Plugin, this obviously wouldn't be very helpful for them since they might not be able to customize the client IDs. I don't have to worry about that though so this works perfectly for me.
-
+<span id="blueprint-nodes"></span>
 Next up are the blueprint nodes. Below is the entire class:
 ```cpp
 UCLASS()

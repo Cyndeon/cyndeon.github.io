@@ -22,10 +22,10 @@ image: assets/Thumbnails/UE5AchievementPlugin.png
 
 💡 **Technical Skills Applied:** 
 - Plugin architecture
-- SDK integration (Steamworks/EOS)
-- Saving/loading system (using UE5's),
-- UI Widgets
-- Blueprint API design
+- [SDK integration (Steamworks/EOS)](#platforms)
+- [Saving/loading system (using UE5's)](#savegame-and-config)
+- [UI Widgets](#popups)
+- [Blueprint API design](#blueprint-nodes)
 - Cross-version compatibility (UE 5.5-5.7) 
 
 🤝 **Soft Skills:**
@@ -211,7 +211,7 @@ ___
 Now that the user has all the tools to set up the achievements, it is important that they can now modify them next.  
 This is how the UI looks:  
 ![](assets/Posts/AchievementPlugin/achievementsSettings.png)
-
+<span id="blueprint-nodes"></span>
 There are Blueprint nodes for doing whatever it is the user would need to do, so these are the nodes the user has access to:  
 ![](../assets/Posts/AchievementPlugin/nodes.png)
 The one that will be used most is the one for increasing achievement progress:
