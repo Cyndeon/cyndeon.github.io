@@ -22,6 +22,13 @@ main.col-12.col-lg-11.col-xl-9 {
 }
 </style>
 
+<!-- Short Description -->
+<div style="text-align: center; margin-bottom: 40px; margin-top: -20px;">
+  <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9); line-height: 1.6; max-width: 1000px; margin: 0 auto;">
+    Gameplay and Tool programming student at BUas specialising in Unreal Engine 5 and C++, with experience as a Lead Developer and shipped work on the <a href="https://www.fab.com/sellers/Justin%20Comans" target="_blank">Unreal Engine Marketplace (FAB)</a>
+  </p>
+</div>
+
 <!-- Filter Button -->
 <div class="filter-container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 0px; margin-top: -42px; margin-bottom: -12px">
   <button id="toggle-filters" style="background-color: #444; color: white; border: none; padding: 4px 8px; border-radius: 50px; cursor: pointer;">Filters ▼</button>
@@ -151,7 +158,7 @@ main.col-12.col-lg-11.col-xl-9 {
         <div class="project-tags">
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
-          <span class="project-tag cpp">Gameplay</span>
+          <span class="project-tag gameplay">Gameplay</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
@@ -171,7 +178,7 @@ main.col-12.col-lg-11.col-xl-9 {
         <div class="project-tags">
           <span class="project-tag unity">Unity</span>
           <span class="project-tag csharp">C#</span>
-          <span class="project-tag cpp">Gameplay</span>
+          <span class="project-tag gameplay">Gameplay</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
