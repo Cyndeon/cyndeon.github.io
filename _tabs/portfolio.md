@@ -35,6 +35,7 @@ main.col-12.col-lg-11.col-xl-9 {
   <button class="filter-btn" data-filter="cpp">C++</button>
   <button class="filter-btn" data-filter="csharp">C#</button>
   <button class="filter-btn" data-filter="virtual-reality">VR</button>
+  <button class="filter-btn" data-filter="gameplay">Gameplay</button>
   <button class="filter-btn" data-filter="tools">Tools</button>
   <button class="filter-btn" data-filter="solo">Solo</button>
   <button class="filter-btn" data-filter="team">Team</button>
@@ -93,7 +94,7 @@ main.col-12.col-lg-11.col-xl-9 {
 		<li>Plugin architecture </li>
 		<li>Multi-threading (FRunnable) </li>
 		<li>Blueprint API design & exposure </li>
-		<li>Subsystem architecture (UEngineSubsystem) </li>
+		<li>Subsystem architecture </li>
 		<li>State machine implementation </li>
         </ul>
         <div class="project-tags">
@@ -105,6 +106,36 @@ main.col-12.col-lg-11.col-xl-9 {
       </div>
     </div>
     <a href="/posts/Wanderland/" class="card-link"></a>
+  </div>
+</div>
+
+
+<!-- MusouGame -->
+<div class="card-wrapper highlight" style="--highlight-gradient-start: #03fc52; --highlight-gradient-end: #00d7fc;" data-tags="tools lead">
+  <div class="project-card highlight">
+    <div class="card-inner">
+      <div class="card-image">
+        <img src="/assets/Thumbnails/musougame.png" alt="">
+      </div>
+      <div class="card-content">
+        <h3>MusouGame</h3>
+        <p class="card-description">A small yet polished Musou Game (WIP)</p>
+        <ul class="card-skills">
+		<li>Gameplay Programming </li>
+		<li>(Editor) Tool programming </li>
+		<li>UE5 AI Pathfinding </li>
+		<li>Implementing VFX, SFX, Models & Animations </li>
+        </ul>
+        <div class="project-tags">
+          <span class="project-tag blogpost">Blog</span>
+          <span class="project-tag unreal">Unreal</span>
+          <span class="project-tag cpp">C++</span>
+          <span class="project-tag gameplay">Gameplay</span>
+          <span class="project-tag solo">Solo</span>
+        </div>
+      </div>
+    </div>
+    <a href="/posts/MusouGame/" class="card-link"></a>
   </div>
 </div>
 
@@ -120,6 +151,7 @@ main.col-12.col-lg-11.col-xl-9 {
         <div class="project-tags">
           <span class="project-tag unreal">Unreal</span>
           <span class="project-tag cpp">C++</span>
+          <span class="project-tag cpp">Gameplay</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>
@@ -139,6 +171,7 @@ main.col-12.col-lg-11.col-xl-9 {
         <div class="project-tags">
           <span class="project-tag unity">Unity</span>
           <span class="project-tag csharp">C#</span>
+          <span class="project-tag cpp">Gameplay</span>
           <span class="project-tag team">Team</span>
         </div>
       </div>

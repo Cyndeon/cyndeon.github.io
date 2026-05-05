@@ -98,13 +98,13 @@ main.col-12.col-lg-11.col-xl-9 {
         <p class="about-text">
             <b>Hi, I'm Justin Comans!</b><br>
             
-            I'm a {{ age }}-year-old programmer specializing in plugin development and SDK integration for Unreal Engine 5. I've published tools to FAB Marketplace, led small programming teams, and built systems that make third-party services accessible through Blueprint nodes.<br><br>
-            
-            My focus is on practical tools: achievement systems that sync across Steam and Epic, editor extensions that improve workflows, and Blueprint APIs that designers can actually use. For projects meant to be reused or shared, I make sure to write proper documentation because nobody wants to reverse-engineer how something works.<br><br>
-            
-            When I'm not building plugins, I'm probably hunting achievements in games, which, coincidentally, inspired my achievement plugin.<br><br>
-            
-            I'm also passionate about VR development and hope to make it my primary focus professionally. Ever since I got my Rift S in 2019, I've been obsessed with VR. I've worked on some VR projects throughout my education. From my first school project with two classmates, to a VR-focused internship, to integrating OpenXR into a custom C++ engine.
+            I'm a {{ age }}-year-old programmer specializing in tool development for Unreal Engine 5. I've published a plugin to the FAB Marketplace, led small programming teams, and worked on many systems, from gameplay features that enhance the player's experience, to editor tools that make developers' lives easier.<br><br>
+
+			My focus is on practical tools: achievement systems that sync across Steam and Epic, editor extensions that improve workflows, and Blueprint APIs that designers can actually use. For projects meant to be reused or shared, I make sure to write proper documentation because nobody wants to reverse-engineer how something works.<br><br>
+
+			When I'm not building plugins, I'm probably hunting achievements in games, which, coincidentally, inspired my achievement plugin.<br><br>
+
+			I'm also passionate about VR development. Ever since I got my Rift S in 2019, I've been obsessed with VR. I've worked on VR projects throughout my educations, from my first school project with two classmates, to a VR-focused internship, to integrating OpenXR into a custom C++ engine.
         </p>
     </div>
 </div>
@@ -114,12 +114,12 @@ main.col-12.col-lg-11.col-xl-9 {
 <h2>Technical Skills:</h2>
 <ul style="font-size: 20px; line-height: 1.6;">
     <li><strong>Engines:</strong> Unreal Engine 5, Unity (2D/3D)</li>
-    <li><strong>Languages:</strong> C++, C#, Blueprint</li>
+    <li><strong>Languages:</strong> C++, C#, UE5 Blueprinting</li>
     <li><strong>SDK Integration:</strong> Steamworks, Epic Online Services (EOS), OpenXR</li>
     <li><strong>Plugin Development:</strong> UE5 plugin architecture, Blueprint API design, editor tools</li>
     <li><strong>Code Porting:</strong> Converting C++ codebases to UE5 (types, threading, headers)</li>
-    <li><strong>UE5 Systems:</strong> Subsystems (UEngineSubsystem), save systems, multi-threading (FRunnable)</li>
-    <li><strong>Gameplay Systems:</strong> State machines, async operations, UI management</li>
+    <li><strong>UE5 Systems:</strong> Subsystems, save systems, </li>
+    <li><strong>Gameplay Systems:</strong> State machines, async operations, UI management, Player Input</li>
 </ul>
 
 <h2>Professional Skills:</h2>

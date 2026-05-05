@@ -992,6 +992,13 @@ After that is done, we will get the amount of achievements and just like with th
 
 ___
 
+## Achievement List
+For my latest update for the plugin, I added a list that can show the player all of the achievements in the game with many settings. More information on this is on [my wiki here](https://github.com/Cyndeon/Achievement-Plugin-UE5/wiki/Achievement-List){:target="_blank"}  
+
+![](../assets/Posts/AchievementPlugin/ListFinal.png)
+
+___
+
 ## Conclusion
 If you have gotten this far, whether you read all of it or just skimmed over it, thank you.  
 I have spent many hours on this project, making sure it works as intended so that anyone can use it.  

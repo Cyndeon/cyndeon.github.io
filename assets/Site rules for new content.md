@@ -21,6 +21,7 @@ The current Tags for Posts are as follows (in this exact order):
 - Csharp
 - Cpp
 - VR
+- Gameplay
 - Tools
 - Solo
 - Team
